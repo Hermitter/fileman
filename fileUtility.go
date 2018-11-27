@@ -50,7 +50,20 @@ func Paste(file File, path string, sync bool) error {
 	return nil
 }
 
-// Delete will remove the file specified in the path
+// Delete will remove the specified file
 func Delete(path string) error {
 	return os.Remove(path)
+}
+
+// Cut will simultaneously Copy() & Delete()
+// a specified file
+func Cut(path string) (File, error) {
+	// copy specified file
+	file, err := Copy(path)
+	if err != nil {
+		return file, err
+	}
+
+	// return copied file & any errors after deletion
+	return file, Delete(path)
 }

@@ -2,6 +2,7 @@ package fileman
 
 import (
 	"io/ioutil"
+	"os"
 	"path/filepath"
 )
 
@@ -12,7 +13,7 @@ func Copy(path string) (File, error) {
 	var contents []byte
 	file := File{"", &contents}
 
-	// attempt to read file contents
+	// read file contents
 	contents, err := ioutil.ReadFile(path)
 	if err != nil {
 		return file, err
@@ -22,4 +23,23 @@ func Copy(path string) (File, error) {
 	file.Name = filepath.Base(path)
 
 	return file, nil
+}
+
+// Paste creates a file inside a specified path.
+// This will overwrite any file with the same name.
+func Paste(file File, path string) error {
+	// create empty file
+	newFile, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer newFile.Close()
+
+	// paste new file contents
+	_, err = newFile.Write(*file.Contents)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -8,7 +8,7 @@ A package that adds file explorer features in easy to use functions.
   - Reminder to check and log function performance.
 
 ## File Functions
-- [ ] Copy
+- [x] Copy
 - [ ] Paste
 - [ ] Delete
 - [ ] Cut

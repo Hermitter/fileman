@@ -42,6 +42,7 @@ func Paste(file File, path string, sync bool) error {
 	}
 
 	// if set, commit file contents to stable storage
+	// setting this to true will slow performance for reliability
 	if sync {
 		newFile.Sync()
 	}

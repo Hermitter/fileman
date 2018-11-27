@@ -27,7 +27,7 @@ func Copy(path string) (File, error) {
 
 // Paste creates a file inside a specified path.
 // This will overwrite any file with the same name.
-func Paste(file File, path string) error {
+func Paste(file File, path string, sync bool) error {
 	// create empty file
 	newFile, err := os.Create(path)
 	if err != nil {
@@ -39,6 +39,11 @@ func Paste(file File, path string) error {
 	_, err = newFile.Write(*file.Contents)
 	if err != nil {
 		return err
+	}
+
+	// if set, commit file contents to stable storage
+	if sync {
+		newFile.Sync()
 	}
 
 	return nil

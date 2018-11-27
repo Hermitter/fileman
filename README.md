@@ -10,8 +10,8 @@ A package that adds file explorer features in easy to use functions.
 ## File Functions
 - [x] Copy
 - [x] Paste
-- [ ] Delete
-- [ ] Cut
+- [x] Delete
+- [x] Cut
 - [ ] Move
 - [ ] Search
 - [ ] Rename

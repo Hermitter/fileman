@@ -9,7 +9,7 @@ import (
 // Copy returns a File struct
 // from a specified file path.
 func Copy(path string) (File, error) {
-	// Initialize empty File
+	// initialize empty File
 	var contents []byte
 	file := File{"", &contents}
 
@@ -42,10 +42,15 @@ func Paste(file File, path string, sync bool) error {
 	}
 
 	// if set, commit file contents to stable storage
-	// setting this to true will slow performance for reliability
+	// setting this to true will trade performance for reliability
 	if sync {
 		newFile.Sync()
 	}
 
 	return nil
+}
+
+// Delete will remove the file specified in the path
+func Delete(path string) error {
+	return os.Remove(path)
 }

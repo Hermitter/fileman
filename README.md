@@ -9,7 +9,7 @@ A package that adds file explorer features in easy to use functions.
 
 ## File Functions
 - [x] Copy
-- [ ] Paste
+- [x] Paste
 - [ ] Delete
 - [ ] Cut
 - [ ] Move

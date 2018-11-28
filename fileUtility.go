@@ -78,6 +78,22 @@ func Rename(filePath, newName string) error {
 	return os.Rename(filePath, folderPath+newName)
 }
 
+func validFolder(folderPath string) error {
+	// throw error if folder Path doesn't exist || points to file
+	if pathType, err := os.Stat(folderPath); os.IsNotExist(err) || pathType.Mode().IsRegular() {
+		// throw any os related errors
+		if err != nil {
+			return err
+		}
+
+		// notify that folder is invalid
+		return errors.New("You did not specify a folder")
+	}
+
+	// folder is valid
+	return nil
+}
+
 // Move a file to a specified path
 func Move(filePath, folderPath string) error {
 	// throw error if newPath doesn't exist || points to file
@@ -102,4 +118,37 @@ func Move(filePath, folderPath string) error {
 
 	// return any errors from moving file
 	return os.Rename(filePath, folderPath+fileName)
+}
+
+// Search Inside (x) Number Of Folders For File
+func Search(desiredFile string, folderPath string, searchDepth int) (string, error) {
+	// // throw error if folder is invalid
+	// if err := validFolder(folderPath); err != nil {
+	// 	return "", err
+	// }
+
+	// // throw error if search depth reached
+	// if searchDepth < 0 {
+	// 	return "", nil
+	// }
+
+	// // read current folder's contents (files & folders)
+	// folders, _ := ioutil.ReadDir(folderPath)
+
+	// // for each folder
+	// for _, item := range folders {
+	// 	// update current folder
+	// 	currentFolder := folderPath + "/" + item.Name()
+
+	// 	// If item is a file & the desired file
+	// 	if item.Mode().IsRegular() && item.Name() == desiredFile {
+	// 		filePath = newSearchDir
+	// 		return
+	// 	}
+
+	// 	// Run again
+	// 	filePath = fileSearch(desiredFile, newSearchDir, searchDepth-1)
+	// }
+
+	return "", nil
 }

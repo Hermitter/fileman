@@ -12,9 +12,10 @@ A package that adds file explorer features in easy to use functions.
 - [x] Paste
 - [x] Delete
 - [x] Cut
-- [ ] Move
+- [x] Move
+- [x] Rename
 - [ ] Search
-- [ ] Rename
+
 
 ## Folder Functions
 - [ ] Copy
@@ -22,5 +23,5 @@ A package that adds file explorer features in easy to use functions.
 - [ ] Delete
 - [ ] Cut
 - [ ] Move
-- [ ] Search
 - [ ] Rename
+- [ ] Search

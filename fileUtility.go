@@ -28,7 +28,7 @@ func Copy(filePath string) (File, error) {
 
 // Paste a file inside a specified path.
 // This will overwrite any file with the same name.
-func Paste(file File, filePath string, sync bool) error {
+func Paste(fileContents *[]byte, filePath string, sync bool) error {
 	// create empty file
 	newFile, err := os.Create(filePath)
 	if err != nil {
@@ -37,7 +37,7 @@ func Paste(file File, filePath string, sync bool) error {
 	defer newFile.Close()
 
 	// paste new file contents
-	_, err = newFile.Write(*file.Contents)
+	_, err = newFile.Write(*fileContents)
 	if err != nil {
 		return err
 	}
@@ -78,33 +78,11 @@ func Rename(filePath, newName string) error {
 	return os.Rename(filePath, folderPath+newName)
 }
 
-func validFolder(folderPath string) error {
-	// throw error if folder Path doesn't exist || points to file
-	if pathType, err := os.Stat(folderPath); os.IsNotExist(err) || pathType.Mode().IsRegular() {
-		// throw any os related errors
-		if err != nil {
-			return err
-		}
-
-		// notify that folder is invalid
-		return errors.New("You did not specify a folder")
-	}
-
-	// folder is valid
-	return nil
-}
-
 // Move a file to a specified path
 func Move(filePath, folderPath string) error {
 	// throw error if newPath doesn't exist || points to file
-	if pathType, err := os.Stat(folderPath); os.IsNotExist(err) || pathType.Mode().IsRegular() {
-		// throw any path validating errors
-		if err != nil {
-			return err
-		}
-
-		// Notify user of mistake
-		return errors.New("You did not specify a folder")
+	if err := validFolder(folderPath); err != nil {
+		return err
 	}
 
 	// if folderPath does not end with "/"
@@ -120,35 +98,52 @@ func Move(filePath, folderPath string) error {
 	return os.Rename(filePath, folderPath+fileName)
 }
 
-// Search Inside (x) Number Of Folders For File
-func Search(desiredFile string, folderPath string, searchDepth int) (string, error) {
-	// // throw error if folder is invalid
-	// if err := validFolder(folderPath); err != nil {
-	// 	return "", err
-	// }
+// Search Inside (x) Number Of Folders For File (WORK IN PROGRESS)
+func Search(desiredFile string, searchDir string, searchDepth int) (filePath string) {
+	// Stop if search depth reached
+	if searchDepth < 0 {
+		return
+	}
 
-	// // throw error if search depth reached
-	// if searchDepth < 0 {
-	// 	return "", nil
-	// }
+	// Read Current Directory Items
+	folders, _ := ioutil.ReadDir(searchDir)
 
-	// // read current folder's contents (files & folders)
-	// folders, _ := ioutil.ReadDir(folderPath)
+	// For each item in Directory
+	for _, item := range folders {
+		// Update current directory
+		newSearchDir := searchDir + "/" + item.Name()
 
-	// // for each folder
-	// for _, item := range folders {
-	// 	// update current folder
-	// 	currentFolder := folderPath + "/" + item.Name()
+		// If item is a file & the desired file
+		if item.Mode().IsRegular() && item.Name() == desiredFile {
+			//fmt.Println(newSearchDir)
+			filePath = newSearchDir
+			return
+		}
 
-	// 	// If item is a file & the desired file
-	// 	if item.Mode().IsRegular() && item.Name() == desiredFile {
-	// 		filePath = newSearchDir
-	// 		return
-	// 	}
+		// Run again
+		//fmt.Println(newSearchDir)
+		filePath = Search(desiredFile, newSearchDir, searchDepth-1)
 
-	// 	// Run again
-	// 	filePath = fileSearch(desiredFile, newSearchDir, searchDepth-1)
-	// }
+		if filePath != "" {
+			return
+		}
+	}
 
-	return "", nil
+	return
+}
+
+// check if a folder path is valid
+func validFolder(folderPath string) error {
+	// throw error if folder Path doesn't exist || points to file
+	if pathType, err := os.Stat(folderPath); os.IsNotExist(err) || pathType.Mode().IsRegular() {
+		// throw any os related errors
+		if err != nil {
+			return errors.New("Folder does not exist: " + folderPath)
+		}
+		// notify that folder is invalid
+		return errors.New("Invalid folder: " + folderPath)
+	}
+
+	// folder is valid
+	return nil
 }

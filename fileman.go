@@ -40,35 +40,38 @@ func GetType(itemPath string) (string, error) {
 	// if item does not exist
 	if os.IsNotExist(err) {
 		return "", errors.New("Item does not exist: " + itemPath)
-
-		// if symbolic link
-	} else if itemSL, err := os.Lstat(itemPath); err == nil && itemSL.Mode()&os.ModeSymlink == os.ModeSymlink {
-		return "symlink", nil // MAY WANT TO DIFFERENTIATE BETWEEN file & dir symlinks IN FUTURE
-
-		// if item is a folder
-	} else if item.Mode().IsDir() {
-		return "dir", nil
-
-		// if item is a file
-	} else if item.Mode().IsRegular() {
-		return "file", nil
-
-		// else error occurred
-	} else {
-		return "", errors.New("Error analysing: " + itemPath)
 	}
+
+	// if symbolic link
+	if itemSL, err := os.Lstat(itemPath); err == nil && itemSL.Mode()&os.ModeSymlink == os.ModeSymlink {
+		return "symlink", nil // MAY WANT TO DIFFERENTIATE BETWEEN file & dir symlinks IN FUTURE
+	}
+
+	// if item is a dir
+	if item.Mode().IsDir() {
+		return "dir", nil
+	}
+
+	// if item is a file
+	if item.Mode().IsRegular() {
+		return "file", nil
+	}
+
+	// else error occurred
+	return "", errors.New("Error analysing: " + itemPath)
 }
 
 // Rename a specified item.
 func Rename(itemPath, newName string) error {
 	// extract directory from item path
-	folderPath := filepath.Dir(itemPath) + "/"
+	dirPath := filepath.Dir(itemPath) + "/"
 
 	// return any errors from renaming file
-	return os.Rename(itemPath, folderPath+newName)
+	return os.Rename(itemPath, dirPath+newName)
 }
 
-// Move will move an item to a specified path.
+// Move an item to a specified path.
+// This calls os.Rename(), but ensures an item is only moved renaming.
 func Move(itemPath, dirPath string) error {
 	// throw error if dirPath doesn't exist
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {

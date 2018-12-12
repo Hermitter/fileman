@@ -14,14 +14,14 @@ A package that adds file explorer features in easy to use functions.
 - [x] Cut
 - [x] Move
 - [x] Rename
-- [ ] Search
+- [x] Search
 
 
 ## Folder Functions
 - [ ] Copy
 - [ ] Paste
-- [ ] Delete
+- [x] Delete
 - [ ] Cut
-- [ ] Move
-- [ ] Rename
+- [x] Move
+- [x] Rename
 - [ ] Search

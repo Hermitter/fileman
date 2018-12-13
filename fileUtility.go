@@ -19,7 +19,7 @@ func CopyFile(filePath string) (File, error) {
 		return file, err
 	}
 
-	// set file name from path
+	// get & set file name from path
 	file.Name = filepath.Base(filePath)
 
 	return file, nil

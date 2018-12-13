@@ -2,6 +2,7 @@ package fileman
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -15,9 +16,15 @@ type File struct {
 	Contents *[]byte
 }
 
+// ToString returns the string value of a File's contents (presumably text).
+func (f File) ToString() string {
+	return fmt.Sprintf("%s", *f.Contents)
+}
+
 // SymLink is a structure representing a single symbolic link
 type SymLink struct {
 	Name string
+	Link string
 }
 
 // Dir is a structure representing a single Directory.
@@ -71,7 +78,7 @@ func Rename(itemPath, newName string) error {
 }
 
 // Move an item to a specified path.
-// This calls os.Rename(), but ensures an item is only moved renaming.
+// This calls os.Rename(), but ensures the item is only moved.
 func Move(itemPath, dirPath string) error {
 	// throw error if dirPath doesn't exist
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {

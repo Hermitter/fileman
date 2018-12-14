@@ -8,28 +8,28 @@ import (
 
 // CopySymLink returns a SymLink struct
 // from a specified path.
-func CopySymLink(symLinkPath string) (SymLink, error) {
+func CopySymLink(path string) (SymLink, error) {
 	// initialize empty SymLink
 	symLink := SymLink{"", ""}
 
-	// if item type is not symlink, return error
-	if iType, err := GetType(symLinkPath); err != nil || iType != "symlink" {
-		return symLink, errors.New("Path is not a SymLink: " + symLinkPath)
+	// if path type is not symlink, return error
+	if pType, err := GetType(path); err != nil || pType != "symlink" {
+		return symLink, errors.New("Path is not a SymLink: " + path)
 	}
 
 	// get symlink's link
-	link, err := os.Readlink(symLinkPath)
+	link, err := os.Readlink(path)
 	if err != nil {
 		return symLink, err
 	}
 
 	// if symlink points to file, obtain full path
-	if iType, _ := os.Stat(symLinkPath); iType.Mode().IsRegular() {
-		link = filepath.Dir(symLinkPath) + "\\" + link
+	if pType, _ := os.Stat(path); pType.Mode().IsRegular() {
+		link = filepath.Dir(path) + "\\" + link
 	}
 
 	// read symlink path
-	symLink.Name = filepath.Base(symLinkPath)
+	symLink.Name = filepath.Base(path)
 	symLink.Link = link
 
 	return symLink, nil
@@ -46,17 +46,17 @@ func PasteSymLink(symlink *SymLink, path string) error {
 
 // CloneSymLink will Copy & Paste a symlink into a specified path.
 // The cloned symLink's name will be taken from the path given.
-func CloneSymLink(symLinkPath string, newSymLinkPath string) error {
+func CloneSymLink(path string, newPath string) error {
 	// copy file
-	newSymLink, err := CopySymLink(symLinkPath)
+	newSymLink, err := CopySymLink(path)
 	if err != nil {
 		return err
 	}
 
 	// set file name from newFilePath
-	newSymLink.Name = filepath.Base(newSymLinkPath)
+	newSymLink.Name = filepath.Base(newPath)
 	// paste new file
-	err = PasteSymLink(&newSymLink, filepath.Dir(newSymLinkPath))
+	err = PasteSymLink(&newSymLink, filepath.Dir(newPath))
 
 	return err
 }

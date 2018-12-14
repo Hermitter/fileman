@@ -8,19 +8,19 @@ import (
 
 // CopyFile returns a File struct
 // from a specified file path.
-func CopyFile(filePath string) (File, error) {
+func CopyFile(path string) (File, error) {
 	// initialize empty File
 	var contents []byte
 	file := File{"", &contents}
 
 	// read & set file contents
-	contents, err := ioutil.ReadFile(filePath)
+	contents, err := ioutil.ReadFile(path)
 	if err != nil {
 		return file, err
 	}
 
 	// get & set file name from path
-	file.Name = filepath.Base(filePath)
+	file.Name = filepath.Base(path)
 
 	return file, nil
 }
@@ -52,28 +52,28 @@ func PasteFile(file *File, path string, sync bool) error {
 
 // CloneFile will Copy & Paste a file into a specified path.
 // The cloned file's name will be taken from the path given.
-func CloneFile(filePath string, newFilePath string, sync bool) error {
+func CloneFile(path string, newPath string, sync bool) error {
 	// copy file
-	newFile, err := CopyFile(filePath)
-	// set file name from newFilePath
-	newFile.Name = filepath.Base(newFilePath)
+	newFile, err := CopyFile(path)
+	// set copied file's name from newPath
+	newFile.Name = filepath.Base(newPath)
 	// paste new file
-	err = PasteFile(&newFile, newFilePath, sync)
+	err = PasteFile(&newFile, newPath, sync)
 
 	return err
 }
 
 // CutFile will simultaneously Copy() & Delete()
 // a specified file
-func CutFile(filePath string) (File, error) {
+func CutFile(path string) (File, error) {
 	// copy specified file
-	file, err := CopyFile(filePath)
+	file, err := CopyFile(path)
 	if err != nil {
 		return file, err
 	}
 
 	// return copied file & any errors after deletion
-	return file, Delete(filePath)
+	return file, Delete(path)
 }
 
 // SearchFile will search inside (x) number of directories for a file (WORK IN PROGRESS)

@@ -16,7 +16,7 @@ type File struct {
 	Contents *[]byte
 }
 
-// ToString returns the string value of a File's contents (presumably text).
+// ToString returns the string value of a File's contents.
 func (f File) ToString() string {
 	return fmt.Sprintf("%s", *f.Contents)
 }
@@ -69,17 +69,18 @@ func GetType(path string) (string, error) {
 }
 
 // Rename a specified item.
-func Rename(itemPath, newName string) error {
+// This calls os.Rename(), but prevents moving.
+func Rename(path, newName string) error {
 	// extract directory from item path
-	dirPath := filepath.Dir(itemPath) + "/"
+	dirPath := filepath.Dir(path) + "/"
 
 	// return any errors from renaming file
-	return os.Rename(itemPath, dirPath+newName)
+	return os.Rename(path, dirPath+newName)
 }
 
 // Move an item to a specified path.
-// This calls os.Rename(), but ensures the item is only moved.
-func Move(itemPath, dirPath string) error {
+// This calls os.Rename(), but prevents renaming.
+func Move(path, dirPath string) error {
 	// throw error if dirPath doesn't exist
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
 		return errors.New("Path destination does not exist: " + dirPath)
@@ -92,19 +93,19 @@ func Move(itemPath, dirPath string) error {
 	}
 
 	// extract item name from path
-	itemName := filepath.Base(itemPath) + "/"
+	itemName := filepath.Base(path) + "/"
 
 	// return any errors from moving file
-	return os.Rename(itemPath, dirPath+itemName)
+	return os.Rename(path, dirPath+itemName)
 }
 
-// Delete will delete a specified item.
-func Delete(itemPath string) error {
-	// if item path is not a dir, remove normally
-	if itemType, _ := GetType(itemPath); itemType != "dir" {
-		return os.Remove(itemPath)
+// Delete will remove a specified item.
+func Delete(path string) error {
+	// if path type is not a dir, remove normally
+	if pType, _ := GetType(path); pType != "dir" {
+		return os.Remove(path)
 	}
 
 	// else delete dir
-	return os.RemoveAll(itemPath)
+	return os.RemoveAll(path)
 }

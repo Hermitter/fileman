@@ -39,33 +39,33 @@ type Dir struct {
 //////////////////////////////////////////////////////////////////
 // Functions that work for all file explorer items (dir, file, symLink).
 
-// GetType returns "dir", "file", or "symlink" from on the path given.
-func GetType(itemPath string) (string, error) {
-	// obtain item info from path
-	item, err := os.Stat(itemPath)
+// GetType returns "dir", "file", or "symlink" from the path given.
+func GetType(path string) (string, error) {
+	// obtain info from path
+	item, err := os.Stat(path)
 
-	// if item does not exist
+	// if path does not exist
 	if os.IsNotExist(err) {
-		return "", errors.New("Item does not exist: " + itemPath)
+		return "", errors.New("Path does not exist: " + path)
 	}
 
-	// if symbolic link
-	if itemSL, err := os.Lstat(itemPath); err == nil && itemSL.Mode()&os.ModeSymlink == os.ModeSymlink {
+	// if path is symbolic link
+	if itemSL, err := os.Lstat(path); err == nil && itemSL.Mode()&os.ModeSymlink == os.ModeSymlink {
 		return "symlink", nil // MAY WANT TO DIFFERENTIATE BETWEEN file & dir symlinks IN FUTURE
 	}
 
-	// if item is a dir
+	// if path is a dir
 	if item.Mode().IsDir() {
 		return "dir", nil
 	}
 
-	// if item is a file
+	// if path is a file
 	if item.Mode().IsRegular() {
 		return "file", nil
 	}
 
 	// else error occurred
-	return "", errors.New("Error analysing: " + itemPath)
+	return "", errors.New("Error analysing: " + path)
 }
 
 // Rename a specified item.

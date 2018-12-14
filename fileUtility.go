@@ -27,16 +27,16 @@ func CopyFile(filePath string) (File, error) {
 
 // PasteFile will paste a file inside a specified path.
 // This will overwrite any file with the same name.
-func PasteFile(fileContents *[]byte, filePath string, sync bool) error {
+func PasteFile(file *File, path string, sync bool) error {
 	// create empty file
-	newFile, err := os.Create(filePath)
+	newFile, err := os.Create(filepath.Dir(path) + "/" + file.Name)
 	if err != nil {
 		return err
 	}
 	defer newFile.Close()
 
 	// paste new file contents
-	_, err = newFile.Write(*fileContents)
+	_, err = newFile.Write(*file.Contents)
 	if err != nil {
 		return err
 	}
@@ -48,6 +48,19 @@ func PasteFile(fileContents *[]byte, filePath string, sync bool) error {
 	}
 
 	return nil
+}
+
+// CloneFile will Copy & Paste a file into a specified path.
+// The cloned file's name will be taken from the path given.
+func CloneFile(filePath string, newFilePath string, sync bool) error {
+	// copy file
+	newFile, err := CopyFile(filePath)
+	// set file name from newFilePath
+	newFile.Name = filepath.Base(newFilePath)
+	// paste new file
+	err = PasteFile(&newFile, newFilePath, sync)
+
+	return err
 }
 
 // CutFile will simultaneously Copy() & Delete()

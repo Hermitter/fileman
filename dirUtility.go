@@ -2,7 +2,6 @@ package fileman
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 )
@@ -10,14 +9,8 @@ import (
 // CopyDir returns a Directory struct
 // from a specified path.
 func CopyDir(path string) (Dir, error) {
-	// initialize empty Dir
-	dir := Dir{"", &[]Dir{}, &[]File{}, &[]SymLink{}, &[]SymLink{}}
-
-	return dir, nil
-}
-
-// SortDirItems dsd s
-func SortDirItems(path string) (Dir, error) {
+	// prevent broken path ex. /homeIShouldBeSeperate.txt
+	path += "/"
 	// initialize empty dir
 	dir := Dir{filepath.Base(path), &[]Dir{}, &[]File{}, &[]SymLink{}, &[]SymLink{}}
 	// get current directory items
@@ -25,7 +18,6 @@ func SortDirItems(path string) (Dir, error) {
 
 	// for each dir item
 	for _, item := range paths {
-		fmt.Println(item.Name()) // CC TEST
 		// get path type
 		switch pType, _ := GetType(path+item.Name(), true); pType {
 
@@ -36,11 +28,8 @@ func SortDirItems(path string) (Dir, error) {
 
 		// if directory, copy to dir's dir list
 		case "dir":
-			////////////////////////////////////////
-			// FIX LOGIC TO MAKE RECURSIVE
-			newDir, _ := SortDirItems(path + item.Name())
+			newDir, _ := CopyDir(path + item.Name())
 			*dir.Dirs = append(*dir.Dirs, newDir)
-			//////////////////////////////////////////
 
 		// if directory, copy to dir's symlink lists
 		case "symlink":
@@ -57,5 +46,6 @@ func SortDirItems(path string) (Dir, error) {
 			return dir, errors.New("Could not determine path type: " + path)
 		}
 	}
+
 	return dir, nil
 }

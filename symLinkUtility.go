@@ -13,7 +13,7 @@ func CopySymLink(path string) (SymLink, error) {
 	symLink := SymLink{"", ""}
 
 	// if path type is not symlink, return error
-	if pType, err := GetType(path); err != nil || pType != "symlink" {
+	if pType, err := GetType(path, true); err != nil || pType != "symlink" {
 		return symLink, errors.New("Path is not a SymLink: " + path)
 	}
 

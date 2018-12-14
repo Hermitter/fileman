@@ -28,19 +28,21 @@ type SymLink struct {
 }
 
 // Dir is a structure representing a single Directory.
-// 3 slices will represent any files, aliases & Directories inside.
+// 4 slices will represent any files, directories, & symbolic links inside.
 type Dir struct {
-	Name     string
-	Dirs     *[]Dir
-	Files    *[]File
-	SymLinks *[]SymLink
+	Name         string
+	Dirs         *[]Dir
+	Files        *[]File
+	DirSymLinks  *[]SymLink
+	FileSymLinks *[]SymLink
 }
 
 //////////////////////////////////////////////////////////////////
 // Functions that work for all file explorer items (dir, file, symLink).
 
-// GetType returns "dir", "file", or "symlink" from the path given.
-func GetType(path string) (string, error) {
+// GetType returns "dir" or "file" from the path given.
+// If set, "symlink" can also be returned.
+func GetType(path string, includeSymLinks bool) (string, error) {
 	// obtain info from path
 	item, err := os.Stat(path)
 
@@ -49,9 +51,12 @@ func GetType(path string) (string, error) {
 		return "", errors.New("Path does not exist: " + path)
 	}
 
-	// if path is symbolic link
-	if itemSL, err := os.Lstat(path); err == nil && itemSL.Mode()&os.ModeSymlink == os.ModeSymlink {
-		return "symlink", nil // MAY WANT TO DIFFERENTIATE BETWEEN file & dir symlinks IN FUTURE
+	// if symbolic links are being checked
+	if includeSymLinks {
+		// if path is symbolic link
+		if itemSL, err := os.Lstat(path); err == nil && itemSL.Mode()&os.ModeSymlink == os.ModeSymlink {
+			return "symlink", nil
+		}
 	}
 
 	// if path is a dir
@@ -102,7 +107,7 @@ func Move(path, dirPath string) error {
 // Delete will remove a specified item.
 func Delete(path string) error {
 	// if path type is not a dir, remove normally
-	if pType, _ := GetType(path); pType != "dir" {
+	if pType, _ := GetType(path, true); pType != "dir" {
 		return os.Remove(path)
 	}
 

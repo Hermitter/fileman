@@ -10,8 +10,7 @@ import (
 // from a specified file path.
 func CopyFile(path string) (File, error) {
 	// initialize empty File
-	var contents []byte
-	file := File{"", &contents}
+	file := File{"", &[]byte{}}
 
 	// read & set file contents
 	contents, err := ioutil.ReadFile(path)
@@ -21,6 +20,7 @@ func CopyFile(path string) (File, error) {
 
 	// get & set file name from path
 	file.Name = filepath.Base(path)
+	*file.Contents = contents
 
 	return file, nil
 }

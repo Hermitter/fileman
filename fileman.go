@@ -25,6 +25,7 @@ func (f File) ToString() string {
 type SymLink struct {
 	Name string
 	Link string
+	Type string
 }
 
 // Dir is a structure representing a single Directory.

@@ -10,7 +10,7 @@ import (
 // from a specified path.
 func CopySymLink(path string) (SymLink, error) {
 	// initialize empty SymLink
-	symLink := SymLink{"", ""}
+	symLink := SymLink{"", "", ""}
 
 	// if path type is not symlink, return error
 	if pType, err := GetType(path, true); err != nil || pType != "symlink" {
@@ -23,9 +23,15 @@ func CopySymLink(path string) (SymLink, error) {
 		return symLink, err
 	}
 
-	// if symlink points to file, obtain full path
+	// if symlink points to file
 	if pType, _ := os.Stat(path); pType.Mode().IsRegular() {
+		// obtain full path
 		link = filepath.Dir(path) + "\\" + link
+		// save link type as file
+		symLink.Type = "file"
+		// else save link type as directory
+	} else {
+		symLink.Type = "dir"
 	}
 
 	// read symlink path

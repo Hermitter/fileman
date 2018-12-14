@@ -2,7 +2,9 @@ package fileman
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
+	"path/filepath"
 )
 
 // CopyDir returns a Directory struct
@@ -17,12 +19,13 @@ func CopyDir(path string) (Dir, error) {
 // SortDirItems dsd s
 func SortDirItems(path string) (Dir, error) {
 	// initialize empty dir
-	dir := Dir{"", &[]Dir{}, &[]File{}, &[]SymLink{}, &[]SymLink{}}
+	dir := Dir{filepath.Base(path), &[]Dir{}, &[]File{}, &[]SymLink{}, &[]SymLink{}}
 	// get current directory items
 	paths, _ := ioutil.ReadDir(path)
 
 	// for each dir item
 	for _, item := range paths {
+		fmt.Println(item.Name()) // CC TEST
 		// get path type
 		switch pType, _ := GetType(path+item.Name(), true); pType {
 
@@ -33,21 +36,23 @@ func SortDirItems(path string) (Dir, error) {
 
 		// if directory, copy to dir's dir list
 		case "dir":
-			//fmt.Println("Found A Dir")
-			// if  symbolic link
+			////////////////////////////////////////
+			// FIX LOGIC TO MAKE RECURSIVE
+			newDir, _ := SortDirItems(path + item.Name())
+			*dir.Dirs = append(*dir.Dirs, newDir)
+			//////////////////////////////////////////
 
 		// if directory, copy to dir's symlink lists
 		case "symlink":
 			newSymLink, _ := CopySymLink(path + item.Name())
-			// get symlink type
-			switch pType, err := GetType(path+item.Name(), false); pType {
-			case "file":
+			// if linked to file, append to FileSymLinks
+			if newSymLink.Type == "file" {
 				*dir.FileSymLinks = append(*dir.FileSymLinks, newSymLink)
-			case "dir":
+			} else {
+				// else append to FileSymLinks
 				*dir.DirSymLinks = append(*dir.DirSymLinks, newSymLink)
-			default:
-				return dir, err
 			}
+		// return error
 		default:
 			return dir, errors.New("Could not determine path type: " + path)
 		}

@@ -13,12 +13,12 @@ import (
 // File is a structure representing a single file.
 type File struct {
 	Name     string
-	Contents *[]byte
+	Contents []byte
 }
 
 // ToString returns the string value of a File's contents.
 func (f File) ToString() string {
-	return fmt.Sprintf("%s", *f.Contents)
+	return fmt.Sprintf("%s", f.Contents)
 }
 
 // SymLink is a structure representing a single symbolic link
@@ -31,11 +31,10 @@ type SymLink struct {
 // Dir is a structure representing a single Directory.
 // 4 slices will represent any files, directories, & symbolic links inside.
 type Dir struct {
-	Name         string
-	Dirs         *[]Dir
-	Files        *[]File
-	DirSymLinks  *[]SymLink
-	FileSymLinks *[]SymLink
+	Name     string
+	Dirs     []Dir
+	Files    []File
+	SymLinks []SymLink
 }
 
 //////////////////////////////////////////////////////////////////

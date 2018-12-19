@@ -10,7 +10,7 @@ import (
 // from a specified file path.
 func CopyFile(path string) (File, error) {
 	// initialize empty File
-	file := File{"", &[]byte{}}
+	file := File{"", []byte{}}
 
 	// read & set file contents
 	contents, err := ioutil.ReadFile(path)
@@ -20,7 +20,7 @@ func CopyFile(path string) (File, error) {
 
 	// get & set file name from path
 	file.Name = filepath.Base(path)
-	*file.Contents = contents
+	file.Contents = contents
 
 	return file, nil
 }
@@ -36,7 +36,7 @@ func PasteFile(file *File, path string, sync bool) error {
 	defer newFile.Close()
 
 	// paste new file contents
-	_, err = newFile.Write(*file.Contents)
+	_, err = newFile.Write(file.Contents)
 	if err != nil {
 		return err
 	}

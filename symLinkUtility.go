@@ -6,6 +6,22 @@ import (
 	"path/filepath"
 )
 
+// SymLink is a structure representing a single symbolic link
+type SymLink struct {
+	Name string
+	Link string
+	Type string
+}
+
+// Paste will paste a symLink inside a specified path.
+// This will overwrite any symLink with the same name.
+func (s SymLink) Paste(path string) error {
+	// Attempt to create symlink
+	err := os.Symlink(s.Link, path+"/"+s.Name)
+
+	return err
+}
+
 // CopySymLink returns a SymLink struct
 // from a specified path.
 func CopySymLink(path string) (SymLink, error) {
@@ -41,15 +57,6 @@ func CopySymLink(path string) (SymLink, error) {
 	return symLink, nil
 }
 
-// PasteSymLink will paste a symLink inside a specified path.
-// This will overwrite any symLink with the same name.
-func PasteSymLink(symlink *SymLink, path string) error {
-	// Attempt to create symlink
-	err := os.Symlink(symlink.Link, path+"/"+symlink.Name)
-
-	return err
-}
-
 // CloneSymLink will Copy & Paste a symlink into a specified path.
 // The cloned symLink's name will be taken from the path given.
 func CloneSymLink(path string, newPath string) error {
@@ -62,7 +69,7 @@ func CloneSymLink(path string, newPath string) error {
 	// set file name from newFilePath
 	newSymLink.Name = filepath.Base(newPath)
 	// paste new file
-	err = PasteSymLink(&newSymLink, filepath.Dir(newPath))
+	err = newSymLink.Paste(filepath.Dir(newPath))
 
 	return err
 }

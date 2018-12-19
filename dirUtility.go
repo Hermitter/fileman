@@ -3,8 +3,18 @@ package fileman
 import (
 	"errors"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 )
+
+// Dir is a structure representing a single Directory.
+// 4 slices will represent any files, directories, & symbolic links inside.
+type Dir struct {
+	Name     string
+	Dirs     []Dir
+	Files    []File
+	SymLinks []SymLink
+}
 
 // CopyDir returns a Directory struct
 // from a specified path.
@@ -45,7 +55,27 @@ func CopyDir(path string) (Dir, error) {
 	return dir, nil
 }
 
-// PasteDir will do...
-func PasteDir() error {
+// Paste will do something FILL IN LATER...
+func (d Dir) Paste(path string, sync bool) error {
+	// create initial directory
+	err := os.Mkdir(path+"/"+d.Name, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	// MAKE RECURSIVE
+	// // for Each directory inside
+	// for i := range d.Dirs {
+	// 	newDir := d.Dirs[i]
+	// 	dirPath := path + "/" + d.Name + "/" + newDir.Name
+	// 	// create the directory
+	// 	os.Mkdir(dirPath, os.ModePerm)
+	// 	// paste each File
+	// 	for f := range newDir.Files {
+	// 		newDir.Files[f].Paste(dirPath+"/"+newDir.Files[f].Name, sync)
+	// 	}
+	// 	// paste each SymLink
+	// }
+
 	return nil
 }

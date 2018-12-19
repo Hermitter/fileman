@@ -1,44 +1,12 @@
+// Package fileman contains file explorer-like functions for
+// Directories, Files, and Symbolic Links (Copy, Paste, Delete, etc..).
 package fileman
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"path/filepath"
 )
-
-//////////////////////////////////////////////////////////////////
-// Structs used to identify each item you'd see in a file explorer
-
-// File is a structure representing a single file.
-type File struct {
-	Name     string
-	Contents []byte
-}
-
-// ToString returns the string value of a File's contents.
-func (f File) ToString() string {
-	return fmt.Sprintf("%s", f.Contents)
-}
-
-// SymLink is a structure representing a single symbolic link
-type SymLink struct {
-	Name string
-	Link string
-	Type string
-}
-
-// Dir is a structure representing a single Directory.
-// 4 slices will represent any files, directories, & symbolic links inside.
-type Dir struct {
-	Name     string
-	Dirs     []Dir
-	Files    []File
-	SymLinks []SymLink
-}
-
-//////////////////////////////////////////////////////////////////
-// Functions that work for all file explorer items (dir, file, symLink).
 
 // GetType returns "dir" or "file" from the path given.
 // If set, "symlink" can also be returned.

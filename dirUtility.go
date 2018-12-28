@@ -2,6 +2,7 @@ package fileman
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -19,7 +20,7 @@ type Dir struct {
 // CopyDir returns a Directory struct
 // from a specified path.
 func CopyDir(path string) (Dir, error) {
-	// prevent broken path ex. /homeIShouldBeSeperate.txt
+	// prevent broken path ex. /homeMyFile.txt --> /home/MyFile.txt
 	path += "/"
 	// initialize empty dir
 	dir := Dir{filepath.Base(path), []Dir{}, []File{}, []SymLink{}}
@@ -55,27 +56,39 @@ func CopyDir(path string) (Dir, error) {
 	return dir, nil
 }
 
-// Paste will do something FILL IN LATER...
+// Paste will paste a Directory inside a specified path.
+// This will not overwrite a Directory with the same name.
 func (d Dir) Paste(path string, sync bool) error {
-	// create initial directory
-	err := os.Mkdir(path+"/"+d.Name, os.ModePerm)
+	// create new directory
+	dirPath := path + "/" + d.Name
+	err := os.Mkdir(dirPath, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	// MAKE RECURSIVE
-	// // for Each directory inside
-	// for i := range d.Dirs {
-	// 	newDir := d.Dirs[i]
-	// 	dirPath := path + "/" + d.Name + "/" + newDir.Name
-	// 	// create the directory
-	// 	os.Mkdir(dirPath, os.ModePerm)
-	// 	// paste each File
-	// 	for f := range newDir.Files {
-	// 		newDir.Files[f].Paste(dirPath+"/"+newDir.Files[f].Name, sync)
-	// 	}
-	// 	// paste each SymLink
-	// }
+	// Paste each file inside directory
+	for i := range d.Files {
+		err := d.Files[i].Paste(dirPath, sync)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	// Paste each symbolic link inside directory
+	for i := range d.SymLinks {
+		err := d.SymLinks[i].Paste(dirPath)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	// for each direcotry
+	for i := range d.Dirs {
+		err := d.Dirs[i].Paste(dirPath, sync)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 
 	return nil
 }

@@ -22,7 +22,7 @@ func (f File) ToString() string {
 // This will overwrite any file with the same name.
 func (f File) Paste(path string, sync bool) error {
 	// create empty file
-	newFile, err := os.Create(filepath.Dir(path) + "/" + f.Name)
+	newFile, err := os.Create(path + "/" + f.Name)
 	if err != nil {
 		return err
 	}

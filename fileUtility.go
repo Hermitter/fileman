@@ -22,7 +22,7 @@ func (f File) ToString() string {
 // This will overwrite any file with the same name.
 func (f File) Paste(path string, sync bool) error {
 	// create empty file
-	newFile, err := os.Create(path + "/" + f.Name)
+	newFile, err := os.Create(filepath.Join(path, f.Name))
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,7 @@ func CopyFile(path string) (File, error) {
 }
 
 // CloneFile will Copy & Paste a file into a specified path.
-// The cloned file's name will be taken from the path given.
+// The new path given should include the name of the file
 func CloneFile(path string, newPath string, sync bool) error {
 	// copy file
 	newFile, err := CopyFile(path)

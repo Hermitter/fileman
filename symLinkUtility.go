@@ -17,9 +17,7 @@ type SymLink struct {
 // This will overwrite any symLink with the same name.
 func (s SymLink) Paste(path string) error {
 	// Attempt to create symlink
-	err := os.Symlink(s.Link, path+"/"+s.Name)
-
-	return err
+	return os.Symlink(s.Link, filepath.Join(path, s.Name))
 }
 
 // CopySymLink returns a SymLink struct
@@ -29,7 +27,7 @@ func CopySymLink(path string) (SymLink, error) {
 	symLink := SymLink{"", "", ""}
 
 	// if path type is not symlink, return error
-	if pType, err := GetType(path, true); err != nil || pType != "symlink" {
+	if pathType, err := GetType(path, true); err != nil || pathType != "symlink" {
 		return symLink, errors.New("Path is not a SymLink: " + path)
 	}
 
@@ -40,7 +38,7 @@ func CopySymLink(path string) (SymLink, error) {
 	}
 
 	// if symlink points to file
-	if pType, _ := os.Stat(path); pType.Mode().IsRegular() {
+	if pathType, _ := os.Stat(path); pathType.Mode().IsRegular() {
 		// obtain full path
 		link = filepath.Dir(path) + "\\" + link
 		// save link type as file

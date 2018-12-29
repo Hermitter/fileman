@@ -17,46 +17,6 @@ type Dir struct {
 	SymLinks []SymLink
 }
 
-// CopyDir returns a Directory struct
-// from a specified path.
-func CopyDir(path string) (Dir, error) {
-	// prevent broken path ex. /homeMyFile.txt --> /home/MyFile.txt
-	path += "/" //FIX THIS LATER
-	// initialize empty dir
-	dir := Dir{filepath.Base(path), []Dir{}, []File{}, []SymLink{}}
-	fmt.Println(filepath.Base(path))
-	// get current directory items
-	paths, _ := ioutil.ReadDir(path)
-
-	// for each dir item
-	for _, item := range paths {
-		// get path type
-		switch pathTy, _ := GetType(path+item.Name(), true); pathTy {
-
-		// if file, copy to dir's file list
-		case "file":
-			newFile, _ := CopyFile(path + item.Name())
-			dir.Files = append(dir.Files, newFile)
-
-		// if directory, copy to dir's dir list
-		case "dir":
-			newDir, _ := CopyDir(path + item.Name())
-			dir.Dirs = append(dir.Dirs, newDir)
-
-		// if directory, copy to dir's symlink lists
-		case "symlink":
-			newSymLink, _ := CopySymLink(path + item.Name())
-			dir.SymLinks = append(dir.SymLinks, newSymLink)
-
-		// return error
-		default:
-			return dir, errors.New("Could not determine path type: " + path)
-		}
-	}
-
-	return dir, nil
-}
-
 // Paste will paste a Directory inside a specified path.
 // This will not overwrite a Directory with the same name.
 func (d Dir) Paste(path string, sync bool) error {
@@ -92,4 +52,56 @@ func (d Dir) Paste(path string, sync bool) error {
 	}
 
 	return nil
+}
+
+// CopyDir returns a Directory struct
+// from a specified path.
+func CopyDir(path string) (Dir, error) {
+	// prevent broken path ex. /homeMyFile.txt --> /home/MyFile.txt
+	path += "/" //FIX THIS LATER
+	// initialize empty dir
+	dir := Dir{filepath.Base(path), []Dir{}, []File{}, []SymLink{}}
+	// get current directory items
+	paths, _ := ioutil.ReadDir(path)
+
+	// for each dir item
+	for _, item := range paths {
+		// get path type
+		switch pathTy, _ := GetType(path+item.Name(), true); pathTy {
+
+		// if file, copy to dir's file list
+		case "file":
+			newFile, _ := CopyFile(path + item.Name())
+			dir.Files = append(dir.Files, newFile)
+
+		// if directory, copy to dir's dir list
+		case "dir":
+			newDir, _ := CopyDir(path + item.Name())
+			dir.Dirs = append(dir.Dirs, newDir)
+
+		// if directory, copy to dir's symlink lists
+		case "symlink":
+			newSymLink, _ := CopySymLink(path + item.Name())
+			dir.SymLinks = append(dir.SymLinks, newSymLink)
+
+		// return error
+		default:
+			return dir, errors.New("Could not determine path type: " + path)
+		}
+	}
+
+	return dir, nil
+}
+
+// CutDir will simultaneously Copy() & Delete()
+// a specified directory
+func CutDir(path string) (Dir, error) {
+	// copy specified symlink
+	dir, err := CopyDir(path)
+	if err != nil {
+		return dir, err
+	}
+
+	// return copied file & any errors after deletion
+	return dir, Delete(path)
 }

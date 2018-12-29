@@ -51,25 +51,14 @@ func Rename(path, newName string) error {
 	return os.Rename(path, dirPath+newName)
 }
 
-// Move an item to a specified path.
+// Move an item to a specified direcotry.
 // This calls os.Rename(), but prevents renaming.
 func Move(path, dirPath string) error {
-	// throw error if dirPath doesn't exist
-	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
-		return errors.New("Path destination does not exist: " + dirPath)
-	}
-
-	// if dirPath does not end with "/"
-	if dirPath[len(dirPath)-1:] != "/" {
-		// add "/"
-		dirPath = dirPath + "/"
-	}
-
 	// extract item name from path
-	itemName := filepath.Base(path) + "/"
+	itemName := filepath.Base(path)
 
 	// return any errors from moving file
-	return os.Rename(path, dirPath+itemName)
+	return os.Rename(path, filepath.Join(dirPath, itemName))
 }
 
 // Delete will remove a specified item.

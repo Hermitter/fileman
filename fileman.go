@@ -4,6 +4,7 @@ package fileman
 
 import (
 	"errors"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -79,4 +80,37 @@ func Delete(path string) error {
 
 	// else delete dir
 	return os.RemoveAll(path)
+}
+
+// Search will look inside searchDir for the item you want to find.
+// SearchDepth determines how far the search will look inside each directory.
+func Search(itemName string, searchDir string, searchDepth int) (itemFound bool, path string) {
+	// Stop if search depth is passed
+	if searchDepth < 0 {
+		return
+	}
+
+	// Read Current Directory Items
+	dirs, _ := ioutil.ReadDir(searchDir)
+
+	// For each item in Directory
+	for _, item := range dirs {
+		// Update current directory
+		newSearchDir := filepath.Join(searchDir, item.Name())
+
+		// If desired item is found, return
+		if item.Name() == itemName {
+			itemFound = true
+			path = newSearchDir
+			return
+		}
+		// Run again since item wasn't found
+		itemFound, path = Search(itemName, newSearchDir, searchDepth-1)
+
+		// if path was already found, exit loop
+		if path != "" {
+			return
+		}
+	}
+	return
 }

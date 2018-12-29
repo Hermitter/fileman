@@ -12,7 +12,4 @@ A package that adds file explorer features in easy to use functions.
   - [x] SymLinks
 - [x] Move
 - [x] Rename
-- [ ] Search
-  - [x] Files
-  - [ ] Dirs
-  - [ ] SymLinks
+- [x] Search

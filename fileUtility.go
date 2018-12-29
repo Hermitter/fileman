@@ -87,37 +87,3 @@ func CutFile(path string) (File, error) {
 	// return copied file & any errors after deletion
 	return file, Delete(path)
 }
-
-// SearchFile will search inside (x) number of directories for a file (WORK IN PROGRESS)
-func SearchFile(desiredFile string, searchDir string, searchDepth int) (filePath string) {
-	// Stop if search depth reached
-	if searchDepth < 0 {
-		return
-	}
-
-	// Read Current Directory Items
-	dirs, _ := ioutil.ReadDir(searchDir)
-
-	// For each item in Directory
-	for _, item := range dirs {
-		// Update current directory
-		newSearchDir := searchDir + "/" + item.Name()
-
-		// If item is a file & the desired file
-		if item.Mode().IsRegular() && item.Name() == desiredFile {
-			//fmt.Println(newSearchDir)
-			filePath = newSearchDir
-			return
-		}
-
-		// Run again
-		//fmt.Println(newSearchDir)
-		filePath = SearchFile(desiredFile, newSearchDir, searchDepth-1)
-
-		if filePath != "" {
-			return
-		}
-	}
-
-	return
-}

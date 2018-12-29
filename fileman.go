@@ -9,7 +9,8 @@ import (
 )
 
 // GetType returns "dir" or "file" from the path given.
-// If set, "symlink" can also be returned.
+// Including symlinks will allow for "symlink" as a return value.
+// If no file is found, an error will be returned
 func GetType(path string, includeSymLinks bool) (string, error) {
 	// obtain info from path
 	item, err := os.Stat(path)
@@ -44,11 +45,19 @@ func GetType(path string, includeSymLinks bool) (string, error) {
 // Rename a specified item.
 // This calls os.Rename(), but prevents moving.
 func Rename(path, newName string) error {
-	// extract directory from item path
-	dirPath := filepath.Dir(path) + "/"
+	// extract directory from path
+	dirPath := filepath.Dir(path)
+
+	// create path for newName
+	newName = filepath.Join(dirPath, newName)
+
+	// throw error if new name is taken
+	if _, err := GetType(newName, false); err == nil {
+		return errors.New("Already Exists: " + newName)
+	}
 
 	// return any errors from renaming file
-	return os.Rename(path, dirPath+newName)
+	return os.Rename(path, newName)
 }
 
 // Move an item to a specified direcotry.

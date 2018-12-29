@@ -3,31 +3,16 @@
 A package that adds file explorer features in easy to use functions.
 
 ## Current Functionality
-- Copy
-  - [x] Files
-  - [x] Dirs
-  - [x] SymLinks
-- Paste
-  - [x] Files
-  - [x] Dirs
-  - [x] SymLinks
-- Delete
-  - [x] Files
-  - [x] Dirs
-  - [x] SymLinks
-- Cut
+- [x] Copy
+- [x] Paste
+- [x] Delete
+- [ ] Cut
   - [x] Files
   - [ ] Dirs
   - [x] SymLinks
-- Move
-  - [x] Files
-  - [x] Dirs
-  - [x] SymLinks
-- Rename
-  - [x] Files
-  - [x] Dirs
-  - [x] SymLinks
-- Search
+- [x] Move
+- [x] Rename
+- [ ] Search
   - [x] Files
   - [ ] Dirs
   - [ ] SymLinks

@@ -2,26 +2,32 @@
 
 A package that adds file explorer features in easy to use functions.
 
-# TODO
-
-## Performance Checks
-  - Reminder to check and log function performance.
-
-## File Functions
-- [x] Copy
-- [x] Paste
-- [x] Delete
-- [x] Cut
-- [x] Move
-- [x] Rename
-- [x] Search
-
-
-## Folder Functions
-- [ ] Copy
-- [ ] Paste
-- [x] Delete
-- [ ] Cut
-- [x] Move
-- [x] Rename
-- [ ] Search
+## Current Functionality
+- Copy
+  - [x] Files
+  - [x] Dirs
+  - [x] SymLinks
+- Paste
+  - [x] Files
+  - [x] Dirs
+  - [x] SymLinks
+- Delete
+  - [x] Files
+  - [x] Dirs
+  - [x] SymLinks
+- Cut
+  - [x] Files
+  - [ ] Dirs
+  - [x] SymLinks
+- Move
+  - [x] Files
+  - [x] Dirs
+  - [x] SymLinks
+- Rename
+  - [x] Files
+  - [x] Dirs
+  - [x] SymLinks
+- Search
+  - [x] Files
+  - [ ] Dirs
+  - [ ] SymLinks

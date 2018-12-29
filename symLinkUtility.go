@@ -1,7 +1,6 @@
 package fileman
 
 import (
-	"errors"
 	"os"
 	"path/filepath"
 )
@@ -26,24 +25,19 @@ func CopySymLink(path string) (SymLink, error) {
 	// initialize empty SymLink
 	symLink := SymLink{"", "", ""}
 
-	// if path type is not symlink, return error
-	if pathType, err := GetType(path, true); err != nil || pathType != "symlink" {
-		return symLink, errors.New("Path is not a SymLink: " + path)
-	}
-
-	// get symlink's link
+	// get link of symlink
 	link, err := os.Readlink(path)
 	if err != nil {
 		return symLink, err
 	}
 
 	// if symlink points to file
-	if pathType, _ := os.Stat(path); pathType.Mode().IsRegular() {
+	if pathType, _ := GetType(path, false); pathType == "file" {
 		// obtain full path
-		link = filepath.Dir(path) + "\\" + link
-		// save link type as file
+		link = filepath.Join(filepath.Dir(path), link)
+		// specify link points to a file
 		symLink.Type = "file"
-		// else save link type as directory
+		// else specify link points to a directory
 	} else {
 		symLink.Type = "dir"
 	}

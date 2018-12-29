@@ -21,16 +21,17 @@ type Dir struct {
 // from a specified path.
 func CopyDir(path string) (Dir, error) {
 	// prevent broken path ex. /homeMyFile.txt --> /home/MyFile.txt
-	path += "/"
+	path += "/" //FIX THIS LATER
 	// initialize empty dir
 	dir := Dir{filepath.Base(path), []Dir{}, []File{}, []SymLink{}}
+	fmt.Println(filepath.Base(path))
 	// get current directory items
 	paths, _ := ioutil.ReadDir(path)
 
 	// for each dir item
 	for _, item := range paths {
 		// get path type
-		switch pType, _ := GetType(path+item.Name(), true); pType {
+		switch pathTy, _ := GetType(path+item.Name(), true); pathTy {
 
 		// if file, copy to dir's file list
 		case "file":
@@ -70,7 +71,7 @@ func (d Dir) Paste(path string, sync bool) error {
 	for i := range d.Files {
 		err := d.Files[i].Paste(dirPath, sync)
 		if err != nil {
-			fmt.Println(err)
+			return (err)
 		}
 	}
 
@@ -78,7 +79,7 @@ func (d Dir) Paste(path string, sync bool) error {
 	for i := range d.SymLinks {
 		err := d.SymLinks[i].Paste(dirPath)
 		if err != nil {
-			fmt.Println(err)
+			return (err)
 		}
 	}
 

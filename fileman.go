@@ -73,7 +73,7 @@ func Move(path, dirPath string) error {
 // Delete will remove a specified item.
 func Delete(path string) error {
 	// if path type is not a dir, remove normally
-	if pType, _ := GetType(path, true); pType != "dir" {
+	if pathType, _ := GetType(path, true); pathType != "dir" {
 		return os.Remove(path)
 	}
 

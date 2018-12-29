@@ -6,10 +6,8 @@ A package that adds file explorer features in easy to use functions.
 - [x] Copy
 - [x] Paste
 - [x] Delete
-- [ ] Cut
-  - [x] Files
-  - [ ] Dirs
-  - [x] SymLinks
+- [x] Cut
 - [x] Move
 - [x] Rename
 - [x] Search
+- [ ] Duplicate

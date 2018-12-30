@@ -1,6 +1,6 @@
-# Fileman (**Under Development**)
+# Fileman
 
-A package that adds file explorer features in easy to use functions.
+Fileman is a go package that provides handy functions for file, direcotry, and symlink managment.
 
 ## Current Functionality
 - [x] Copy
@@ -11,3 +11,6 @@ A package that adds file explorer features in easy to use functions.
 - [x] Rename
 - [x] Search
 - [x] Duplicate
+
+## Usage
+**COMING SOON**

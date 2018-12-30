@@ -43,7 +43,7 @@ func main() {
 ```
 </details>
 
-<details close>
+<details open>
 <summary><b>Delete</b></summary>
 
 ```go

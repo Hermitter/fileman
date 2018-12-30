@@ -15,7 +15,7 @@ Fileman is a go package that provides handy functions for **files**, **directori
 ## Usage
 `More examples coming soon`
 <details open>
-<summary>Copy & Paste</summary>
+<summary><b>Copy & Paste</b></summary>
 
 * Directories
 ```go

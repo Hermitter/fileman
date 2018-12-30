@@ -4,6 +4,8 @@ Fileman is a go package that provides handy functions for **files**, **directori
 
 GoDocs: https://godoc.org/github.com/Hermitter/fileman
 
+**Note, this library hasn't been thoroughly tested yet. This is still a work in progress, but most functions should work as intended.**
+
 ## Current Functionality
 - [x] Copy
 - [x] Paste

@@ -35,7 +35,7 @@ func main() {
   newDir.Files = newDir.Files[:len(newDir.Files)-1]
 
   // Paste directory
-  err := dir.Paste("/home/jake", false)
+  err := newDir.Paste("/home/jake", false)
   if err != nil {
     fmt.Println(err)
   }

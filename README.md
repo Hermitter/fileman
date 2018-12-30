@@ -48,7 +48,7 @@ func main() {
 
 ```go
 func main(){
-  err := fileman.Delete(/home/jake/documents/myFile.txt)
+  err := fileman.Delete("/home/jake/documents/myFile.txt")
   if err != nil {
     fmt.Println(err)
   }

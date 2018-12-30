@@ -51,23 +51,23 @@ func CopySymLink(path string) (SymLink, error) {
 
 // CloneSymLink will Copy & Paste a symlink into a specified path.
 // The cloned symLink's name will be taken from the path given.
-func CloneSymLink(path string, newPath string) error {
-	// copy file
+func cloneSymLink(path string, newPath string) error {
+	// copy symLink
 	newSymLink, err := CopySymLink(path)
 	if err != nil {
 		return err
 	}
 
-	// set file name from newFilePath
+	// set symLink name from newPath
 	newSymLink.Name = filepath.Base(newPath)
-	// paste new file
+	// paste new symLink
 	err = newSymLink.Paste(filepath.Dir(newPath))
 
 	return err
 }
 
 // CutSymLink will simultaneously Copy() & Delete()
-// a specified symlink
+// a specified symlink.
 func CutSymLink(path string) (SymLink, error) {
 	// copy specified symlink
 	symLink, err := CopySymLink(path)

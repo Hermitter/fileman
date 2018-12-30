@@ -44,7 +44,6 @@ func GetType(path string, includeSymLinks bool) (string, error) {
 }
 
 // Rename a specified item.
-// This calls os.Rename(), but prevents moving.
 func Rename(path, newName string) error {
 	// extract directory from path
 	dirPath := filepath.Dir(path)
@@ -62,7 +61,6 @@ func Rename(path, newName string) error {
 }
 
 // Move an item to a specified direcotry.
-// This calls os.Rename(), but prevents renaming.
 func Move(path, dirPath string) error {
 	// extract item name from path
 	itemName := filepath.Base(path)
@@ -80,6 +78,27 @@ func Delete(path string) error {
 
 	// else delete dir
 	return os.RemoveAll(path)
+}
+
+// Duplicate will clone a specified item and place it in the newPath given.
+// newPath should include the new name of what's being duplicated.
+// Sync parameter does not affect symlinks.
+func Duplicate(path, newPath string, sync bool) error {
+	// Call correct function for cloning item
+	switch itemType, err := GetType(path, true); itemType {
+	// File Clone
+	case "file":
+		return cloneFile(path, newPath, sync)
+	// Directory Clone
+	case "dir":
+		return cloneDir(path, newPath, sync)
+	// Symbolic Link Clone
+	case "symlink":
+		return cloneSymLink(path, newPath)
+	// Error getting type
+	default:
+		return err
+	}
 }
 
 // Search will look inside searchDir for the item you want to find.

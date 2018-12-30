@@ -64,9 +64,13 @@ func CopyFile(path string) (File, error) {
 
 // CloneFile will Copy & Paste a file into a specified path.
 // The new path given should include the name of the file
-func CloneFile(path string, newPath string, sync bool) error {
+func cloneFile(path string, newPath string, sync bool) error {
 	// copy file
 	newFile, err := CopyFile(path)
+	if err != nil {
+		return err
+	}
+
 	// set copied file's name from newPath
 	newFile.Name = filepath.Base(newPath)
 	// paste new file

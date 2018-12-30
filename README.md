@@ -10,4 +10,4 @@ A package that adds file explorer features in easy to use functions.
 - [x] Move
 - [x] Rename
 - [x] Search
-- [ ] Duplicate
+- [x] Duplicate

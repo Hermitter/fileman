@@ -93,6 +93,23 @@ func CopyDir(path string) (Dir, error) {
 	return dir, nil
 }
 
+// CloneDir will Copy & Paste a dir into a specified path.
+// The cloned dir's name will be taken from the path given.
+func cloneDir(path string, newPath string, sync bool) error {
+	// copy dir
+	newDir, err := CopyDir(path)
+	if err != nil {
+		return err
+	}
+
+	// set copied dirs's name from newPath
+	newDir.Name = filepath.Base(newPath)
+	// paste new dir
+	err = newDir.Paste(newPath, sync)
+
+	return err
+}
+
 // CutDir will simultaneously Copy() & Delete()
 // a specified directory
 func CutDir(path string) (Dir, error) {

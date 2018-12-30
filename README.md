@@ -13,4 +13,4 @@ Fileman is a go package that provides handy functions for files, directories, an
 - [x] Duplicate
 
 ## Usage
-**COMING SOON**
+`I'll get to it soon`

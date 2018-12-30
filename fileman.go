@@ -1,5 +1,5 @@
 // Package fileman contains file explorer-like functions for
-// Directories, Files, and Symbolic Links (Copy, Paste, Delete, etc..).
+// Directories, Files, and Symbolic Links.
 package fileman
 
 import (

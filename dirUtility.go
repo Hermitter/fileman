@@ -58,16 +58,25 @@ func (d Dir) Paste(path string, sync bool) error {
 // from a specified path.
 func CopyDir(path string) (Dir, error) {
 	// prevent broken path ex. /homeMyFile.txt --> /home/MyFile.txt
-	path += "/" //FIX THIS LATER
+	path += "/" //IMPROVE THIS LATER
 	// initialize empty dir
 	dir := Dir{filepath.Base(path), []Dir{}, []File{}, []SymLink{}}
+
+	// check if Directory exists
+	itemType, err := GetType(path, true)
+	if itemType != "dir" {
+		return dir, errors.New("Not a valid directory: " + path)
+	} else if err != nil {
+		return dir, errors.New("Path is not valid: " + path)
+	}
+
 	// get current directory items
 	paths, _ := ioutil.ReadDir(path)
 
 	// for each dir item
 	for _, item := range paths {
 		// get path type
-		switch pathTy, _ := GetType(path+item.Name(), true); pathTy {
+		switch pathType, _ := GetType(path+item.Name(), true); pathType {
 
 		// if file, copy to dir's file list
 		case "file":

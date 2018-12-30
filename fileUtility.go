@@ -1,6 +1,7 @@
 package fileman
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -48,6 +49,14 @@ func (f File) Paste(path string, sync bool) error {
 func CopyFile(path string) (File, error) {
 	// initialize empty File
 	file := File{"", []byte{}}
+
+	// check if File exists
+	itemType, err := GetType(path, true)
+	if itemType != "file" {
+		return file, errors.New("Not a valid file: " + path)
+	} else if err != nil {
+		return file, errors.New("Path is not valid: " + path)
+	}
 
 	// read & set file contents
 	contents, err := ioutil.ReadFile(path)

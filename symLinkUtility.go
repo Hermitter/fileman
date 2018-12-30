@@ -1,6 +1,7 @@
 package fileman
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 )
@@ -24,6 +25,14 @@ func (s SymLink) Paste(path string) error {
 func CopySymLink(path string) (SymLink, error) {
 	// initialize empty SymLink
 	symLink := SymLink{"", "", ""}
+
+	// check if SymLink exists
+	itemType, err := GetType(path, true)
+	if itemType != "file" {
+		return symLink, errors.New("Not a valid symlink: " + path)
+	} else if err != nil {
+		return symLink, errors.New("Path is not valid: " + path)
+	}
 
 	// get link of symlink
 	link, err := os.Readlink(path)

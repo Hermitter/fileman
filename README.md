@@ -1,8 +1,8 @@
 # Fileman
+[![GoDoc](https://godoc.org/github.com/Hermitter/fileman?status.svg)](https://godoc.org/github.com/Hermitter/fileman)
+[![Go Report Card](https://goreportcard.com/badge/github.com/hermitter/fileman)](https://goreportcard.com/report/github.com/hermitter/fileman)
 
 Fileman is a go package that provides handy functions for **files**, **directories**, and **symbolic links**.
-
-GoDocs: https://godoc.org/github.com/Hermitter/fileman
 
 **Note, this library hasn't been thoroughly tested yet. This is still a work in progress, but most functions should work as intended.**
 

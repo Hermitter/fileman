@@ -74,7 +74,7 @@ func cloneFile(path string, newPath string, sync bool) error {
 	// set copied file's name from newPath
 	newFile.Name = filepath.Base(newPath)
 	// paste new file
-	err = newFile.Paste(newPath, sync)
+	err = newFile.Paste(filepath.Dir(newPath), sync)
 
 	return err
 }

@@ -105,7 +105,7 @@ func cloneDir(path string, newPath string, sync bool) error {
 	// set copied dirs's name from newPath
 	newDir.Name = filepath.Base(newPath)
 	// paste new dir
-	err = newDir.Paste(newPath, sync)
+	err = newDir.Paste(filepath.Dir(newPath), sync)
 
 	return err
 }

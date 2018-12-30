@@ -60,7 +60,7 @@ func Rename(path, newName string) error {
 	return os.Rename(path, newName)
 }
 
-// Move an item to a specified direcotry.
+// Move an item to a specified directory.
 func Move(path, dirPath string) error {
 	// extract item name from path
 	itemName := filepath.Base(path)

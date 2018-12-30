@@ -43,7 +43,7 @@ func (d Dir) Paste(path string, sync bool) error {
 		}
 	}
 
-	// for each direcotry
+	// for each directory
 	for i := range d.Dirs {
 		err := d.Dirs[i].Paste(dirPath, sync)
 		if err != nil {

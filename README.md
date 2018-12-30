@@ -13,4 +13,26 @@ Fileman is a go package that provides handy functions for **files**, **directori
 - [x] Duplicate
 
 ## Usage
-`I'll get to it soon`
+`More examples coming soon`
+<details open>
+<summary>Copy & Paste</summary>
+
+* Directories
+```go
+  // Copy
+  newDir, _ := fileman.CopyDir("/home/jake/documents")
+  newDir.Name = "cloned_documents"
+
+  // Paste
+  err = dir.Paste("/home/jake", false)
+  if err != nil {
+    fmt.Println(err)
+  }
+```
+
+* Files
+
+* Symbolic Links
+
+</details>
+

@@ -28,16 +28,22 @@ go get -u github.com/Hermitter/fileman
 // Directory Example
 func main() {
   // Copy directory
-  newDir, _ := fileman.CopyDir("/home/jake/documents")
-  newDir.Name = "cloned_documents"
+  newDir, err := fileman.CopyDir("/home/john/documents")
+  if err != nil {
+    fmt.Println(err)
+    os.Exit(3)
+  }
 
+  // Rename copied directory
+  newDir.Name = "cloned_documents"
   // Remove last file from directory
   newDir.Files = newDir.Files[:len(newDir.Files)-1]
 
   // Paste directory
-  err := newDir.Paste("/home/jake", false)
+  err = newDir.Paste("/home/john", false)
   if err != nil {
     fmt.Println(err)
+    os.Exit(3)
   }
 }
 ```

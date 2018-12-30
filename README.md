@@ -1,6 +1,6 @@
 # Fileman
 
-Fileman is a go package that provides handy functions for file, direcotry, and symlink managment.
+Fileman is a go package that provides handy functions for files, directories, and symbolic link managment.
 
 ## Current Functionality
 - [x] Copy

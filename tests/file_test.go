@@ -22,8 +22,6 @@ func TestMain(m *testing.M) {
 	// run fileman tests
 	code := m.Run()
 
-	// delete test file & exit
-	os.Remove("file.txt")
 	os.Exit(code)
 }
 
@@ -53,23 +51,31 @@ func TestPaste(t *testing.T) {
 		t.Error("A File with no name was pasted")
 	}
 
-	// paste a new valid file
-	newFile.Name = "pastedFile.txt"
+	// paste a new valid file (should override existing file)
+	newFile.Name = "file.txt"
+	newFile.Contents = []byte("goodbye world")
 	err = newFile.Paste("./", false)
 	if err != nil {
-		t.Error("Content from test file was not copied correctly.")
+		t.Error(err)
+	}
+
+	// copy file again
+	newFile, _ = fileman.CopyFile("file.txt")
+	// check if content has changed
+	if newFile.ToString() != "goodbye world" {
+		t.Error("Paste did not overwrite test file")
 	}
 }
 
 func TestCut(t *testing.T) {
 	// cut recently pasted file
-	_, err := fileman.CutFile("./pastedFile.txt")
+	_, err := fileman.CutFile("./file.txt")
 	if err != nil {
 		t.Error(err)
 	}
 
 	// verify cut file was deleted
-	if _, err := fileman.GetType("./pastedFile.txt", false); err == nil {
+	if _, err := fileman.GetType("./file.txt", false); err == nil {
 		t.Error("Cut file was not deleted")
 	}
 

@@ -15,11 +15,6 @@ Fileman is a go package that provides handy functions for **files**, **directori
 - [x] Search
 - [x] Duplicate
 
-## Tests
-- [ ] Files
-- [ ] Dirs
-- [ ] SymLinks
-
 ## Installation
 ```bash
 go get -u github.com/Hermitter/fileman

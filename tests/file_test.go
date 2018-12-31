@@ -59,7 +59,7 @@ func TestPaste(t *testing.T) {
 	}
 
 	// paste a valid file \\
-	newFile.Name = "file.txt"
+	newFile.Name = "file2.txt"
 	newFile.Contents = []byte("goodbye world")
 	err = newFile.Paste("./", false)
 	if err != nil {
@@ -69,6 +69,8 @@ func TestPaste(t *testing.T) {
 	if newFile, _ = fileman.CopyFile("file.txt"); newFile.ToString() != "goodbye world" {
 		t.Error("Paste did not match contents given")
 	}
+	// delete file
+	fileman.Delete("file.txt")
 
 }
 

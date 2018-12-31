@@ -54,7 +54,7 @@ func TestPaste(t *testing.T) {
 	// paste a new file with path already taken \\
 	newFile.Name = "file.txt"
 	err = newFile.Paste("./", false)
-	if err != nil {
+	if err == nil {
 		t.Error(err)
 	}
 

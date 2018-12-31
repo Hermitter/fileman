@@ -23,7 +23,7 @@ func (f File) ToString() string {
 // This will not overwrite any existing paths.
 func (f File) Paste(path string, sync bool) error {
 	// check if path is taken
-	if _, err := GetType(path, false); err != nil {
+	if _, err := GetType(path, false); err == nil {
 		return errors.New("Path already exists: " + path)
 	}
 

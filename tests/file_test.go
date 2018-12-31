@@ -9,6 +9,8 @@ import (
 	"github.com/hermitter/fileman"
 )
 
+var newFile = fileman.File{}
+
 // TestMain creates a file for testing
 func TestMain(m *testing.M) {
 	// create test file
@@ -25,7 +27,6 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-// TestCopy does things
 func TestCopy(t *testing.T) {
 	// copy a nonexistent file
 	_, err := fileman.CopyFile("fakeFile.txt")
@@ -34,7 +35,7 @@ func TestCopy(t *testing.T) {
 	}
 
 	// copy an existing file
-	newFile, err := fileman.CopyFile("file.txt")
+	newFile, err = fileman.CopyFile("file.txt")
 	if err != nil {
 		t.Error(err)
 	}
@@ -45,5 +46,31 @@ func TestCopy(t *testing.T) {
 }
 
 func TestPaste(t *testing.T) {
+	// paste File with no name
+	newFile.Name = ""
+	err := newFile.Paste("", false)
+	if err == nil {
+		t.Error("A File with no name was pasted")
+	}
+
+	// paste a new valid file
+	newFile.Name = "pastedFile.txt"
+	err = newFile.Paste("./", false)
+	if err != nil {
+		t.Error("Content from test file was not copied correctly.")
+	}
+}
+
+func TestCut(t *testing.T) {
+	// cut recently pasted file
+	_, err := fileman.CutFile("./pastedFile.txt")
+	if err != nil {
+		t.Error(err)
+	}
+
+	// verify cut file was deleted
+	if _, err := fileman.GetType("./pastedFile.txt", false); err == nil {
+		t.Error("Cut file was not deleted")
+	}
 
 }

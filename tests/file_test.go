@@ -53,26 +53,23 @@ func TestPaste(t *testing.T) {
 
 	// paste a new file with path already taken \\
 	newFile.Name = "file.txt"
-	newFile.Contents = []byte("goodbye world")
 	err = newFile.Paste("./", false)
-	if err == nil {
-		t.Error("Overwrote an existing path")
+	if err != nil {
+		t.Error(err)
 	}
-	// delete file
-	fileman.Delete("file.txt")
 
-	// paste a new valid file \\
+	// paste a valid file \\
 	newFile.Name = "file.txt"
 	newFile.Contents = []byte("goodbye world")
 	err = newFile.Paste("./", false)
 	if err != nil {
 		t.Error(err)
 	}
-
-	// check if content has changed
+	// check if content was added
 	if newFile, _ = fileman.CopyFile("file.txt"); newFile.ToString() != "goodbye world" {
-		t.Error("Paste did not overwrite test file")
+		t.Error("Paste did not match contents given")
 	}
+
 }
 
 // func TestPasteOverwrite(t *testing.T) {

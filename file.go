@@ -22,13 +22,16 @@ func (f File) ToString() string {
 // Paste will paste a file inside a specified path.
 // This will not overwrite any existing paths.
 func (f File) Paste(path string, sync bool) error {
-	// check if path is taken
-	if _, err := GetType(path, false); err == nil {
-		return errors.New("Path already exists: " + path)
+	// where new file will be pasted
+	pastePath := filepath.Join(path, f.Name)
+
+	// if path is taken, return error
+	if _, err := GetType(pastePath, false); err == nil {
+		return errors.New("Path already exists: " + pastePath)
 	}
 
 	// create empty file
-	newFile, err := os.Create(filepath.Join(path, f.Name))
+	newFile, err := os.Create(pastePath)
 	if err != nil {
 		return err
 	}

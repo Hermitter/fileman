@@ -4,8 +4,6 @@
 
 Fileman is a go package that provides handy functions for **files**, **directories**, and **symbolic links**.
 
-**Note, this library hasn't been thoroughly tested yet. This is still a work in progress, but most functions should work as intended.**
-
 ## Current Functionality
 - [x] Copy
 - [x] Paste
@@ -15,6 +13,11 @@ Fileman is a go package that provides handy functions for **files**, **directori
 - [x] Rename
 - [x] Search
 - [x] Duplicate
+
+## Tests
+- [ ] Files
+- [ ] Dirs
+- [ ] SymLinks
 
 ## Installation
 ```bash

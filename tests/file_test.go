@@ -51,7 +51,7 @@ func TestPaste(t *testing.T) {
 		t.Error("A File with no name was pasted")
 	}
 
-	// paste a new valid file (should override existing file)
+	// paste a new file with path already taken
 	newFile.Name = "file.txt"
 	newFile.Contents = []byte("goodbye world")
 	err = newFile.Paste("./", false)
@@ -59,13 +59,30 @@ func TestPaste(t *testing.T) {
 		t.Error(err)
 	}
 
-	// copy file again
-	newFile, _ = fileman.CopyFile("file.txt")
+	// delete file
+	fileman.Delete("file.txt")
+
+	// paste a new valid file
+	newFile.Name = "file.txt"
+	newFile.Contents = []byte("goodbye world")
+	err = newFile.Paste("./", false)
+	if err != nil {
+		t.Error(err)
+	}
+
 	// check if content has changed
-	if newFile.ToString() != "goodbye world" {
+	if newFile, _ = fileman.CopyFile("file.txt"); newFile.ToString() != "goodbye world" {
 		t.Error("Paste did not overwrite test file")
 	}
 }
+
+// func TestPasteOverwrite(t *testing.T) {
+// 	if itemType, _ := fileman.GetType("./file.txt", false); itemType != "file" {
+// 		t.Error("file was not pasted")
+// 		os.Exit(0)
+// 	}
+
+// }
 
 func TestCut(t *testing.T) {
 	// cut recently pasted file

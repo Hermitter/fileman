@@ -78,5 +78,4 @@ func TestCut(t *testing.T) {
 	if _, err := fileman.GetType("./file.txt", false); err == nil {
 		t.Error("Cut file was not deleted")
 	}
-
 }

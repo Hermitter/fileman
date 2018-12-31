@@ -13,6 +13,12 @@ go:
 git:
   depth: 1
 
+# Specify which operating systems to test on
+os:
+  - windows
+  - linux
+  - osx
+  
 # Skip the install step. Don't `go get` dependencies. Only build with the code
 # in vendor/
 install: true

@@ -20,8 +20,13 @@ func (f File) ToString() string {
 }
 
 // Paste will paste a file inside a specified path.
-// This will overwrite any file with the same name.
+// This will not overwrite any existing paths.
 func (f File) Paste(path string, sync bool) error {
+	// check if path is taken
+	if _, err := GetType(path, false); err != nil {
+		return errors.New("Path already exists: " + path)
+	}
+
 	// create empty file
 	newFile, err := os.Create(filepath.Join(path, f.Name))
 	if err != nil {

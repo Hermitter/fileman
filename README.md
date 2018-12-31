@@ -1,4 +1,5 @@
 # Fileman
+[![Build Status](https://travis-ci.com/Hermitter/fileman.svg?branch=master)](https://travis-ci.com/Hermitter/fileman)
 [![GoDoc](https://godoc.org/github.com/Hermitter/fileman?status.svg)](https://godoc.org/github.com/Hermitter/fileman)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hermitter/fileman)](https://goreportcard.com/report/github.com/hermitter/fileman)
 

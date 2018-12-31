@@ -1,4 +1,4 @@
-package fileman
+package testfileman
 
 import (
 	"fmt"
@@ -44,25 +44,24 @@ func TestCopy(t *testing.T) {
 }
 
 func TestPaste(t *testing.T) {
-	// paste File with no name
+	// paste File with no name \\
 	newFile.Name = ""
 	err := newFile.Paste("", false)
 	if err == nil {
 		t.Error("A File with no name was pasted")
 	}
 
-	// paste a new file with path already taken
+	// paste a new file with path already taken \\
 	newFile.Name = "file.txt"
 	newFile.Contents = []byte("goodbye world")
 	err = newFile.Paste("./", false)
-	if err != nil {
-		t.Error(err)
+	if err == nil {
+		t.Error("Overwrote an existing path")
 	}
-
 	// delete file
 	fileman.Delete("file.txt")
 
-	// paste a new valid file
+	// paste a new valid file \\
 	newFile.Name = "file.txt"
 	newFile.Contents = []byte("goodbye world")
 	err = newFile.Paste("./", false)
@@ -81,7 +80,6 @@ func TestPaste(t *testing.T) {
 // 		t.Error("file was not pasted")
 // 		os.Exit(0)
 // 	}
-
 // }
 
 func TestCut(t *testing.T) {

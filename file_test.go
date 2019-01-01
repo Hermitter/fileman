@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hermitter/fileman"
+	"github.com/Hermitter/fileman"
 )
 
 var newFile = fileman.File{}
@@ -38,7 +38,8 @@ func TestCopy(t *testing.T) {
 		t.Error(err)
 	}
 	// check if contents were copied
-	if newFile.ToString() != "hello world" {
+	text, _ := newFile.ToString()
+	if text != "hello world" {
 		t.Error("Content from test file was not copied correctly.")
 	}
 }
@@ -66,7 +67,8 @@ func TestPaste(t *testing.T) {
 		t.Error(err)
 	}
 	// check if content was added
-	if newFile, _ = fileman.CopyFile("file2.txt"); newFile.ToString() != "goodbye world" {
+	text, _ := newFile.ToString()
+	if newFile, _ = fileman.CopyFile("file2.txt"); text != "goodbye world" {
 		t.Error("Paste did not match contents given")
 	}
 	// delete file

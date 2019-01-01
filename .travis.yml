@@ -3,6 +3,7 @@ language: go
 # Force-enable Go modules. This will be unnecessary when Go 1.12 lands.
 env:
   - GO111MODULE=on
+  - CODECOV_TOKEN=f824a8c4-23a9-4011-a2f5-282b9efac7a6
 
 # You don't need to test on very old version of the Go compiler. It's the user's
 # responsibility to keep their compilers up to date.
@@ -32,3 +33,7 @@ notifications:
 # .golangci.yml file at the top level of your repo.
 script:
   - go test -v  # Run all go tests
+
+# run after scripts successfully finish
+after_success:
+- bash <(curl -s https://codecov.io/bash)

@@ -15,7 +15,7 @@ type SymLink struct {
 
 // Paste will paste a symLink inside a specified path.
 // This will overwrite any symLink with the same name.
-func (s SymLink) Paste(path string) error {
+func (s *SymLink) Paste(path string) error {
 	// Attempt to create symlink
 	return os.Symlink(s.Link, filepath.Join(path, s.Name))
 }

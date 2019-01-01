@@ -19,7 +19,7 @@ type Dir struct {
 
 // Paste will paste a Directory inside a specified path.
 // This will not overwrite a Directory with the same name.
-func (d Dir) Paste(path string, sync bool) error {
+func (d *Dir) Paste(path string, sync bool) error {
 	// create new directory
 	dirPath := path + "/" + d.Name
 	err := os.Mkdir(dirPath, os.ModePerm)

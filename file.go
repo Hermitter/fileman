@@ -27,13 +27,13 @@ func (f *File) ToString() (string, error) {
 	}
 
 	// return error if not utf8 valid
-	return "", errors.New("File " + f.Name + " contents do not contain a valid string")
+	return "", errors.New("\"" + f.Name + "\" File contents are not a valid string")
 
 }
 
 // Paste will paste a file inside a specified path.
 // This will not overwrite any existing paths.
-func (f File) Paste(path string, sync bool) error {
+func (f *File) Paste(path string, sync bool) error {
 	// where new file will be pasted
 	pastePath := filepath.Join(path, f.Name)
 

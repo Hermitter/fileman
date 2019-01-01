@@ -1,4 +1,4 @@
-package testfileman
+package fileman_test
 
 import (
 	"fmt"

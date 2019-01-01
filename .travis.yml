@@ -9,6 +9,7 @@ env:
 # responsibility to keep their compilers up to date.
 go:
   - 1.11.x
+  - tip
 
 # Only clone the most recent commit.
 git:
@@ -32,8 +33,8 @@ notifications:
 # failing test, we want to see both. Configure golangci-lint with a
 # .golangci.yml file at the top level of your repo.
 script:
-  - go test -v  # Run all go tests
+  - go test -race -coverprofile=coverage.txt -covermode=atomic  # Run all go tests
 
-# run after scripts successfully finish
+# run after tests successfully finish
 after_success:
 - bash <(curl -s https://codecov.io/bash)

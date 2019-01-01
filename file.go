@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"unicode/utf8"
 )
 
 // File is a structure representing a single file.
@@ -15,8 +16,19 @@ type File struct {
 }
 
 // ToString returns the string value of a File's contents.
-func (f File) ToString() string {
-	return fmt.Sprintf("%s", f.Contents)
+// Will return an error if string is not utf8 valid
+func (f *File) ToString() (string, error) {
+	// format file text
+	fileText := fmt.Sprintf("%s", f.Contents)
+
+	// if utf8 valid, return string
+	if utf8.ValidString(fileText) {
+		return fileText, nil
+	}
+
+	// return error if not utf8 valid
+	return "", errors.New("File " + f.Name + " contents do not contain a valid string")
+
 }
 
 // Paste will paste a file inside a specified path.

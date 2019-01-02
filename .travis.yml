@@ -28,6 +28,11 @@ install: true
 notifications:
   email: false
 
+# Build marix for customizing different jobs
+matrix:
+  allow_failures:
+    - os: windows
+
 # script always runs to completion (set +e). If we have linter issues AND a
 # failing test, we want to see both. Configure golangci-lint with a
 # .golangci.yml file at the top level of your repo.
@@ -36,4 +41,4 @@ script:
 
 # run after tests successfully finish
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)

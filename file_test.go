@@ -17,7 +17,7 @@ func TestCopy(t *testing.T) {
 	}
 
 	// copy test file & edit copied contents
-	newFile, err := CopyFile("./ftest/copy.txt")
+	newFile, err := CopyFile("./fTest/copy.txt")
 	if err != nil {
 		t.Error(err)
 	}

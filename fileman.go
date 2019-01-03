@@ -45,6 +45,12 @@ func GetType(path string, includeSymLinks bool) (string, error) {
 
 // Rename a specified item.
 func Rename(path, newName string) error {
+	// extract full paths
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+
 	// extract directory from path
 	dirPath := filepath.Dir(path)
 
@@ -62,6 +68,16 @@ func Rename(path, newName string) error {
 
 // Move an item to a specified directory.
 func Move(path, dirPath string) error {
+	// extract full paths
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+	dirPath, err = filepath.Abs(dirPath)
+	if err != nil {
+		return err
+	}
+
 	// extract item name from path
 	itemName := filepath.Base(path)
 
@@ -71,6 +87,12 @@ func Move(path, dirPath string) error {
 
 // Delete will remove a specified item.
 func Delete(path string) error {
+	// extract full paths
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+
 	// if path type is not a dir, remove normally
 	if pathType, _ := GetType(path, true); pathType != "dir" {
 		return os.Remove(path)
@@ -84,18 +106,24 @@ func Delete(path string) error {
 // newPath should include the new name of what's being duplicated.
 // Sync parameter does not affect symlinks.
 func Duplicate(path, newPath string, sync bool) error {
-	// Call correct function for cloning item
+	// extract full directory path
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+
+	// call correct function for cloning item
 	switch itemType, err := GetType(path, true); itemType {
-	// File Clone
+	// File clone
 	case "file":
 		return cloneFile(path, newPath, sync)
-	// Directory Clone
+	// Directory clone
 	case "dir":
 		return cloneDir(path, newPath, sync)
-	// Symbolic Link Clone
+	// Symbolic Link clone
 	case "symlink":
 		return cloneSymLink(path, newPath)
-	// Error getting type
+	// error getting type
 	default:
 		return err
 	}
@@ -110,6 +138,7 @@ func Search(itemName string, searchDir string, searchDepth int) (itemFound bool,
 	}
 
 	// Read Current Directory Items
+	searchDir, _ = filepath.Abs(path)
 	dirs, _ := ioutil.ReadDir(searchDir)
 
 	// For each item in Directory

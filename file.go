@@ -28,12 +28,17 @@ func (f *File) ToString() (string, error) {
 
 	// return error if not utf8 valid
 	return "", errors.New("\"" + f.Name + "\" File contents are not a valid string")
-
 }
 
 // Paste will paste a file inside a specified path.
 // This will not overwrite any existing paths.
 func (f *File) Paste(path string, sync bool) error {
+	// extract full path
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+
 	// where new file will be pasted
 	pastePath := filepath.Join(path, f.Name)
 
@@ -111,6 +116,12 @@ func cloneFile(path string, newPath string, sync bool) error {
 // CutFile will simultaneously Copy() & Delete()
 // a specified file
 func CutFile(path string) (File, error) {
+	// extract full path
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return File{}, err
+	}
+
 	// copy specified file
 	file, err := CopyFile(path)
 	if err != nil {

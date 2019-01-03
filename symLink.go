@@ -16,6 +16,12 @@ type SymLink struct {
 // Paste will paste a symLink inside a specified path.
 // This will overwrite any symLink with the same name.
 func (s *SymLink) Paste(path string) error {
+	// extract full path
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+
 	// Attempt to create symlink
 	return os.Symlink(s.Link, filepath.Join(path, s.Name))
 }
@@ -25,6 +31,12 @@ func (s *SymLink) Paste(path string) error {
 func CopySymLink(path string) (SymLink, error) {
 	// initialize empty SymLink
 	symLink := SymLink{"", "", ""}
+
+	// extract full path
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return symLink, err
+	}
 
 	// check if SymLink exists
 	itemType, err := GetType(path, true)
@@ -78,6 +90,12 @@ func cloneSymLink(path string, newPath string) error {
 // CutSymLink will simultaneously Copy() & Delete()
 // a specified symlink.
 func CutSymLink(path string) (SymLink, error) {
+	// extract full path
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return SymLink{}, err
+	}
+
 	// copy specified symlink
 	symLink, err := CopySymLink(path)
 	if err != nil {

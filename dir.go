@@ -27,7 +27,7 @@ func (d *Dir) Paste(path string, sync bool) error {
 		return err
 	}
 
-	// Paste each file inside directory
+	// paste each file inside directory
 	for i := range d.Files {
 		err := d.Files[i].Paste(dirPath, sync)
 		if err != nil {
@@ -57,10 +57,17 @@ func (d *Dir) Paste(path string, sync bool) error {
 // CopyDir returns a Directory struct
 // from a specified path.
 func CopyDir(path string) (Dir, error) {
-	// prevent broken path ex. /homeMyFile.txt --> /home/MyFile.txt
-	path += "/" //IMPROVE THIS LATER
 	// initialize empty dir
-	dir := Dir{filepath.Base(path), []Dir{}, []File{}, []SymLink{}}
+	dir := Dir{"", []Dir{}, []File{}, []SymLink{}}
+
+	// extract full directory path
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return dir, err
+	}
+
+	// get directory name
+	dir.Name = filepath.Base("/" + path)
 
 	// check if Directory exists
 	itemType, err := GetType(path, true)
@@ -75,27 +82,28 @@ func CopyDir(path string) (Dir, error) {
 
 	// for each dir item
 	for _, item := range paths {
-		// get path type
-		switch pathType, _ := GetType(path+item.Name(), true); pathType {
+		itemPath := filepath.Join(path, item.Name())
 
+		// Determine how to copy
+		switch pathType, _ := GetType(itemPath, true); pathType {
 		// if file, copy to dir's file list
 		case "file":
-			newFile, _ := CopyFile(path + item.Name())
+			newFile, _ := CopyFile(itemPath)
 			dir.Files = append(dir.Files, newFile)
 
 		// if directory, copy to dir's dir list
 		case "dir":
-			newDir, _ := CopyDir(path + item.Name())
+			newDir, _ := CopyDir(itemPath)
 			dir.Dirs = append(dir.Dirs, newDir)
 
 		// if directory, copy to dir's symlink lists
 		case "symlink":
-			newSymLink, _ := CopySymLink(path + item.Name())
+			newSymLink, _ := CopySymLink(itemPath)
 			dir.SymLinks = append(dir.SymLinks, newSymLink)
 
 		// return error
 		default:
-			return dir, errors.New("Could not determine path type: " + path)
+			return dir, errors.New("Could not determine path type: " + itemPath)
 		}
 	}
 
@@ -122,6 +130,12 @@ func cloneDir(path string, newPath string, sync bool) error {
 // CutDir will simultaneously Copy() & Delete()
 // a specified directory
 func CutDir(path string) (Dir, error) {
+	// extract full path
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return Dir{}, err
+	}
+
 	// copy specified symlink
 	dir, err := CopyDir(path)
 	if err != nil {

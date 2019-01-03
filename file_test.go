@@ -1,97 +1,109 @@
-package fileman_test
+package fileman
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"testing"
-
-	"github.com/Hermitter/fileman"
 )
-
-var newFile = fileman.File{}
 
 // TestMain creates a file for testing
 func TestMain(m *testing.M) {
-	// create test file
-	err := ioutil.WriteFile("file.txt", []byte("hello world"), 0644)
-	if err != nil {
-		fmt.Printf("Unable to write file: %v", err)
-	}
-
+	// create test directory
+	os.MkdirAll("fTest", os.ModePerm)
 	// run fileman tests
 	code := m.Run()
-
+	// delete test directory & exit
+	os.RemoveAll("fTest")
 	os.Exit(code)
 }
 
 func TestCopy(t *testing.T) {
+	// create test file
+	ioutil.WriteFile("./fTest/copy.txt", []byte("Hello "), 0644)
+
 	// copy a nonexistent file
-	_, err := fileman.CopyFile("fakeFile.txt")
+	_, err := CopyFile("badCopy.txt")
 	if err == nil {
 		t.Error("A nonexistent file was copied.")
 	}
 
-	// copy an existing file
-	newFile, err = fileman.CopyFile("file.txt")
+	// copy test file & edit copied contents
+	newFile, err := CopyFile("./ftest/copy.txt")
 	if err != nil {
 		t.Error(err)
 	}
+	newFile.Contents = append(newFile.Contents, []byte("World")...)
+
 	// check if contents were copied
 	text, _ := newFile.ToString()
-	if text != "hello world" {
+	if text != "Hello World" {
 		t.Error("Content from test file was not copied correctly.")
 	}
+
 }
 
 func TestPaste(t *testing.T) {
-	// paste File with no name \\
-	newFile.Name = ""
-	err := newFile.Paste("", false)
-	if err == nil {
-		t.Error("A File with no name was pasted")
-	}
+	// create test file
+	ioutil.WriteFile("./fTest/paste.txt", []byte("Hello "), 0644)
 
-	// paste a new file with path already taken \\
-	newFile.Name = "file.txt"
-	err = newFile.Paste("./", false)
-	if err == nil {
-		t.Error(err)
-	}
+	// copy & delete test file
+	newFile, _ := CopyFile("./fTest/paste.txt")
+	os.Remove("./fTest/paste.txt")
 
-	// paste a valid file \\
-	newFile.Name = "file2.txt"
-	newFile.Contents = []byte("goodbye world")
-	err = newFile.Paste("./", false)
+	// test valid paste
+	err := newFile.Paste("./fTest", false)
 	if err != nil {
 		t.Error(err)
 	}
-	// check if content was added
-	text, _ := newFile.ToString()
-	if newFile, _ = fileman.CopyFile("file2.txt"); text != "goodbye world" {
-		t.Error("Paste did not match contents given")
+
+	// test invalid paste with empty struct
+	newFile = File{}
+	err = newFile.Paste("./fTest", false)
+	if err == nil {
+		t.Error("Tried to paste an empty File struct")
 	}
-	// delete file
-	fileman.Delete("file2.txt")
+}
+
+func TestClone(t *testing.T) {
+	// create test file
+	ioutil.WriteFile("./fTest/clone.txt", []byte("Hello"), 0644)
+
+	// test valid clone
+	err := cloneFile("./fTest/clone.txt", "./fTest/newClone.txt", false)
+	if err != nil {
+		t.Error(err)
+	}
+	// check if new file was created
+	if _, err := os.Stat("./fTest/newClone.txt"); os.IsNotExist(err) {
+		t.Error("newClone.txt was not cloned")
+	}
+
+	// test invalid clone by copying a dir
+	err = cloneFile("./fTest", "./fTest/newClone.txt", false)
+	if err == nil {
+		t.Error("Path to clone was not a file")
+	}
 
 }
 
-// func TestPasteOverwrite(t *testing.T) {
-// 	if itemType, _ := fileman.GetType("./file.txt", false); itemType != "file" {
-// 		t.Error("file was not pasted")
-// 		os.Exit(0)
-// 	}
-// }
-
 func TestCut(t *testing.T) {
-	// cut recently pasted file
-	_, err := fileman.CutFile("./file.txt")
+	// create test file
+	ioutil.WriteFile("./fTest/cut.txt", []byte("Hello"), 0644)
+
+	// test valid cut
+	newFile, err := CutFile("./fTest/cut.txt")
 	if err != nil {
 		t.Error(err)
 	}
 
-	// verify cut file was deleted
-	if _, err := fileman.GetType("./file.txt", false); err == nil {
-		t.Error("Cut file was not deleted")
+	// check if content was copied
+	if text, _ := newFile.ToString(); newFile.Name != "cut.txt" && text != "Hello" {
+		t.Error("cut.txt was not properly copied")
+	}
+
+	// test invalid cut
+	newFile, err = CutFile("./fTest/badCut.txt")
+	if err == nil {
+		t.Error("Cannot cut and invalid path")
 	}
 }

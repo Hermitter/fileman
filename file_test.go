@@ -6,17 +6,6 @@ import (
 	"testing"
 )
 
-// TestMain creates a file for testing
-func TestMain(m *testing.M) {
-	// create test directory
-	os.MkdirAll("fTest", os.ModePerm)
-	// run fileman tests
-	code := m.Run()
-	// delete test directory & exit
-	os.RemoveAll("fTest")
-	os.Exit(code)
-}
-
 func TestCopy(t *testing.T) {
 	// create test file
 	ioutil.WriteFile("./fTest/copy.txt", []byte("Hello "), 0644)

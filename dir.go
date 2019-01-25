@@ -86,17 +86,17 @@ func CopyDir(path string) (Dir, error) {
 
 		// Determine how to copy
 		switch pathType, _ := GetType(itemPath, true); pathType {
-		// if file, copy to dir's file list
+		// if file, add to file list
 		case "file":
 			newFile, _ := CopyFile(itemPath)
 			dir.Files = append(dir.Files, newFile)
 
-		// if directory, copy to dir's dir list
+		// if directory, add to dir list
 		case "dir":
 			newDir, _ := CopyDir(itemPath)
 			dir.Dirs = append(dir.Dirs, newDir)
 
-		// if directory, copy to dir's symlink lists
+		// if symlink, add to symlink list
 		case "symlink":
 			newSymLink, _ := CopySymLink(itemPath)
 			dir.SymLinks = append(dir.SymLinks, newSymLink)

@@ -137,28 +137,25 @@ func Search(itemName string, searchDir string, searchDepth int) (itemFound bool,
 		return
 	}
 
-	// Read Current Directory Items
-	searchDir, _ = filepath.Abs(path)
+	// Read Current Directory Items (will err to prevent files from being treated as a searchDir)
 	dirs, _ := ioutil.ReadDir(searchDir)
 
 	// For each item in Directory
 	for _, item := range dirs {
-		// Update current directory
-		newSearchDir := filepath.Join(searchDir, item.Name())
+
+		// Update current path
+		itemPath := filepath.Join(searchDir, item.Name())
 
 		// If desired item is found, return
 		if item.Name() == itemName {
 			itemFound = true
-			path = newSearchDir
+			path, _ = filepath.Abs(itemPath)
 			return
 		}
-		// Run again since item wasn't found
-		itemFound, path = Search(itemName, newSearchDir, searchDepth-1)
 
-		// if path was already found, exit loop
-		if path != "" {
-			return
-		}
+		// Run again
+		itemFound, path = Search(itemName, itemPath, searchDepth-1)
+
 	}
 	return
 }

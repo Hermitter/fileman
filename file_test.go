@@ -1,6 +1,9 @@
 package fileman
 
 import (
+	"image"
+	"image/color"
+	"image/png"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -40,7 +43,7 @@ func TestPaste(t *testing.T) {
 	os.Remove("./fTest/paste.txt")
 
 	// test valid paste
-	err := newFile.Paste("./fTest", false)
+	err := newFile.Paste("./fTest", true)
 	if err != nil {
 		t.Error(err)
 	}
@@ -50,6 +53,17 @@ func TestPaste(t *testing.T) {
 	err = newFile.Paste("./fTest", false)
 	if err == nil {
 		t.Error("Tried to paste an empty File struct")
+	}
+
+	//test invalid paste path error
+	fakeFile := File{
+		Name:     "fake.txt",
+		Contents: []byte("Hello"),
+	}
+
+	err = fakeFile.Paste("./fTest/🤬🐛", false)
+	if err == nil {
+		t.Error("Tried to paste to an invalid path")
 	}
 }
 
@@ -86,7 +100,7 @@ func TestCut(t *testing.T) {
 	}
 
 	// check if content was copied
-	if text, err := newFile.ToString(); newFile.Name != "cut.txt" && text != "Hello" && err != nil {
+	if text, _ := newFile.ToString(); newFile.Name != "cut.txt" && text != "Hello" {
 		t.Error("cut.txt was not properly copied")
 	}
 
@@ -94,5 +108,37 @@ func TestCut(t *testing.T) {
 	newFile, err = CutFile("./fTest/badCut.txt")
 	if err == nil {
 		t.Error("Cannot cut and invalid path")
+	}
+}
+
+func TestToString(t *testing.T) {
+	// test valid tostring
+	fakeFile := File{
+		Name:     "fake.txt",
+		Contents: []byte("Hello"),
+	}
+
+	// check if content was copied
+	text, err := fakeFile.ToString()
+	if err != nil && text != "Hello" {
+		t.Error(err)
+	}
+
+	// test invalid tostring with .png
+
+	// create an image
+	img := image.NewRGBA(image.Rect(0, 0, 100, 50))
+	img.Set(2, 3, color.RGBA{255, 0, 0, 255})
+
+	// save image
+	f, _ := os.OpenFile("./fTest/image.png", os.O_WRONLY|os.O_CREATE, 0600)
+	png.Encode(f, img)
+	f.Close()
+
+	// check if content was valid
+	imageFile, _ := CopyFile("./fTest/image.png")
+	_, err = imageFile.ToString()
+	if err == nil {
+		t.Error(err)
 	}
 }

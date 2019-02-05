@@ -27,7 +27,7 @@ func (f *File) ToString() (string, error) {
 	}
 
 	// return error if not utf8 valid
-	return "", errors.New("\"" + f.Name + "\" File contents are not a valid string")
+	return "", errors.New("\"" + f.Name + "\" file contents did not have a valid string")
 }
 
 // Paste will paste a file inside a specified path.

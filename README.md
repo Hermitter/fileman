@@ -15,6 +15,7 @@ Fileman is a go package that provides handy functions for **files**, **directori
 - [x] Rename
 - [x] Search
 - [x] Duplicate
+- [x] Get Type
 
 ## Installation
 ```bash
@@ -91,3 +92,17 @@ fmt.Println("Found it here: " + path)
 ```
 </details>
 
+<details open>
+<summary><b>Get Type</b></summary>
+
+```go
+itemType, err := fileman.GetType("/home/john/media", false)
+
+if err != nil {
+  fmt.Println(err)
+  return
+}
+
+fmt.Println(itemType)// Can print "dir" or "file"
+```
+</details>

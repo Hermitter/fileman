@@ -86,7 +86,7 @@ func TestCut(t *testing.T) {
 	}
 
 	// check if content was copied
-	if text, _ := newFile.ToString(); newFile.Name != "cut.txt" && text != "Hello" {
+	if text, err := newFile.ToString(); newFile.Name != "cut.txt" && text != "Hello" && err != nil {
 		t.Error("cut.txt was not properly copied")
 	}
 

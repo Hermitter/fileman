@@ -27,40 +27,67 @@ go get -u github.com/Hermitter/fileman
 <summary><b>Copy & Paste</b></summary>
 
 ```go
-// Directory Example
-func main() {
-  // Copy directory
-  newDir, err := fileman.CopyDir("/home/john/documents")
+// Copy directory
+newDir, err := fileman.CopyDir("/home/john/documents")
   if err != nil {
-    fmt.Println(err)
-    os.Exit(3)
+  fmt.Println(err)
+    return
   }
 
-  // Rename copied directory
-  newDir.Name = "cloned_documents"
-  // Remove last file from directory
-  newDir.Files = newDir.Files[:len(newDir.Files)-1]
+// Rename copy
+newDir.Name = "cloned_documents"
+// Contents of copied dir can be read & edited
+//Dirs     []Dir
+//Files    []File
+//SymLinks []SymLink
 
-  // Paste directory
-  err = newDir.Paste("/home/john", false)
-  if err != nil {
-    fmt.Println(err)
-    os.Exit(3)
-  }
+// Paste directory
+err = newDir.Paste("/home/john", false)
+if err != nil {
+  fmt.Println(err)
+  return
 }
 ```
 </details>
 
 <details open>
-<summary><b>Delete</b></summary>
+<summary><b>Rename, Move & Delete</b></summary>
 
 ```go
-func main(){
-  err := fileman.Delete("/home/jake/documents/myFile.txt")
+  // Rename
+  err := fileman.Rename("./old.txt", "new.txt")
   if err != nil {
     fmt.Println(err)
+    return
   }
+
+  // Move
+  err = fileman.Move("./new.txt", "/home/john/documents")
+  if err != nil {
+  fmt.Println(err)
+    return
+  }
+
+  // Delete
+  err = fileman.Delete("/home/john/documents/new.txt")
+  if err != nil {
+    fmt.Println(err)
+    return
+  }
+```
+</details>
+
+<details open>
+<summary><b>Search</b></summary>
+
+```go
+found, path := fileman.Search("needle.txt", "/home/john/haystack", 1)
+if !found {
+  fmt.Println("Search Failed!")
+  return
 }
+
+fmt.Println("Found it here: " + path)
 ```
 </details>
 

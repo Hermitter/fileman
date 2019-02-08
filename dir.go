@@ -97,7 +97,7 @@ func CopyDir(path string) (Dir, error) {
 			dir.Dirs = append(dir.Dirs, newDir)
 
 		// if symlink, add to symlink list
-		case "symlink":
+		case "symLink":
 			newSymLink, _ := CopySymLink(itemPath)
 			dir.SymLinks = append(dir.SymLinks, newSymLink)
 

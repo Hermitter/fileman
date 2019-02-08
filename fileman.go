@@ -10,7 +10,7 @@ import (
 )
 
 // GetType returns "dir" or "file" from the path given.
-// Including symlinks will allow for "symlink" as a return value.
+// Including symbolic Links will allow for "symLink" as a return value.
 // If no file is found, an error will be returned
 func GetType(path string, includeSymLinks bool) (string, error) {
 	// obtain info from path
@@ -25,7 +25,7 @@ func GetType(path string, includeSymLinks bool) (string, error) {
 	if includeSymLinks {
 		// if path is symbolic link
 		if itemSL, err := os.Lstat(path); err == nil && itemSL.Mode()&os.ModeSymlink == os.ModeSymlink {
-			return "symlink", nil
+			return "symLink", nil
 		}
 	}
 
@@ -121,7 +121,7 @@ func Duplicate(path, newPath string, sync bool) error {
 	case "dir":
 		return cloneDir(path, newPath, sync)
 	// Symbolic Link clone
-	case "symlink":
+	case "symLink":
 		return cloneSymLink(path, newPath)
 	// error getting type
 	default:

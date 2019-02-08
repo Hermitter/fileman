@@ -43,12 +43,12 @@ func TestGetType(t *testing.T) {
 		t.Error("GetType did not detect directory")
 	}
 
-	if itemType, _ := GetType("./fileman/symLink", false); itemType != "symLink" {
+	if itemType, _ := GetType("./fileman/symLink", true); itemType != "symLink" || err != nil {
 		t.Error("GetType did not detect symLink")
 	}
 
 	// invalid test
-	if itemType, err := GetType("./fileman/fake", false); itemType != "" && err == nil {
+	if itemType, err := GetType("./fileman/fake", true); itemType != "" && err == nil {
 		t.Error("GetType did not fail correctly for non-Existing file")
 	}
 }

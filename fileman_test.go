@@ -3,6 +3,7 @@ package fileman
 import (
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -28,7 +29,8 @@ func TestGetType(t *testing.T) {
 	// create test items (file, dir, symLink)
 	ioutil.WriteFile("./fileman/file", []byte("Sup brah"), 0644)
 	err := os.Mkdir("./fileman/dir", os.ModePerm)
-	err = os.Symlink("./fileman/file", "./fileman/symLink")
+	linkPath, err := filepath.Abs("./fileman/dir")
+	err = os.Symlink(linkPath, "./fileman/symLink")
 
 	if err != nil {
 		t.Error(err)
@@ -36,15 +38,15 @@ func TestGetType(t *testing.T) {
 
 	// valid tests
 	if itemType, _ := GetType("./fileman/file", false); itemType != "file" || err != nil {
-		t.Error("GetType did not detect file")
+		t.Error(err, "GetType did not detect file")
 	}
 
 	if itemType, _ := GetType("./fileman/dir", false); itemType != "dir" || err != nil {
-		t.Error("GetType did not detect directory")
+		t.Error(err, "GetType did not detect directory")
 	}
 
 	if itemType, _ := GetType("./fileman/symLink", true); itemType != "symLink" || err != nil {
-		t.Error("GetType did not detect symLink")
+		t.Error(err, "GetType did not detect symLink")
 	}
 
 	// invalid test

@@ -140,3 +140,69 @@ func TestDelete(t *testing.T) {
 		t.Error("Delete tried to use an invalid path")
 	}
 }
+
+func TestDuplicate(t *testing.T) {
+	// create test items (file, dir, symLink)
+	ioutil.WriteFile("./fileman/duplicateFile", []byte("Sup brah"), 0644)
+	err := os.Mkdir("./fileman/duplicateDir", os.ModePerm)
+	linkPath, err := filepath.Abs("./fileman/duplicateDir")
+	err = os.Symlink(linkPath, "./fileman/duplicateSymLink")
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	// valid duplicate
+	if err := Duplicate("./fileman/duplicateFile", "./fileman/duplicatedFile", true); err != nil {
+		t.Error(err)
+	}
+	if err := Duplicate("./fileman/duplicateDir", "./fileman/duplicatedDir", false); err != nil {
+		t.Error(err)
+	}
+	if err := Duplicate("./fileman/duplicateSymLink", "./fileman/duplicatedSymLink", false); err != nil {
+		t.Error(err)
+	}
+
+	// invalid duplicate
+	if err := Duplicate("./fileman/NotAPath", "./fileman/NotAPath", false); err == nil {
+		t.Error("Duplicate tried to use an invalid path")
+	}
+}
+
+func TestSearch(t *testing.T) {
+	// create test items (file, dir, symLink)
+	ioutil.WriteFile("./fileman/searchFile", []byte("Sup brah"), 0644)
+	err := os.Mkdir("./fileman/searchDir", os.ModePerm)
+	path, err := filepath.Abs("./fileman")
+	linkPath := filepath.Join(path, "searchDir")
+	err = os.Symlink(linkPath, "./fileman/searchSymLink")
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	// valid search (search depth 0)
+	if itemFound, itemPath := Search("searchFile", "./fileman", 0); !itemFound || itemPath != filepath.Join(path, "searchFile") {
+		t.Error("searchFile was not found")
+	}
+
+	if itemFound, itemPath := Search("searchSymLink", "./fileman", 0); !itemFound || itemPath != filepath.Join(path, "searchSymLink") {
+		t.Error("searchSymLink was not found")
+	}
+
+	// valid search (search depth 3)
+	os.Mkdir("./fileman/searchDir/dir1", os.ModePerm)
+	os.Mkdir("./fileman/searchDir/dir1/dir2", os.ModePerm)
+	os.Mkdir("./fileman/searchDir/dir1/dir2/dir3", os.ModePerm)
+
+	os.Mkdir("./fileman/searchDir/dir1/dir2/dir3/goal", os.ModePerm)
+
+	if itemFound, itemPath := Search("goal", "./fileman/searchDir", 3); !itemFound || itemPath != filepath.Join(path, "searchDir/dir1/dir2/dir3/goal") {
+		t.Error(itemPath)
+	}
+
+	// invalid search
+	if itemFound, _ := Search("notReal", "./fileman", 0); itemFound {
+		t.Error("Search tried to use an invalid path")
+	}
+}

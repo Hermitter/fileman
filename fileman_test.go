@@ -136,7 +136,7 @@ func TestDelete(t *testing.T) {
 	}
 
 	// invalid delete
-	if err := Delete("./fileman/NotAPath"); err != nil {
+	if err := Delete("./fileman/NotAPath"); err == nil {
 		t.Error("Delete tried to use an invalid path")
 	}
 }

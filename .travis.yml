@@ -35,9 +35,8 @@ matrix:
     
 # Install golang
 before_install:
-  go get -t -v ./...
-#   - go mod init filemanTest
-#   - go get -u github.com/Hermitter/fileman
+  - go mod init codecov
+  - go get -u github.com/Hermitter/fileman
 
 # script always runs to completion (set +e). If we have linter issues AND a
 # failing test, we want to see both. Configure golangci-lint with a

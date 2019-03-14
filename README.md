@@ -23,7 +23,6 @@ go get -u github.com/Hermitter/fileman
 ```
 
 ## Usage
-`More examples coming soon`
 <details open>
 <summary><b>Copy & Paste</b></summary>
 

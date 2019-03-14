@@ -23,6 +23,7 @@ go get -u github.com/Hermitter/fileman
 ```
 
 ## Usage
+<!-- COPY & PASTE -->
 <details open>
 <summary><b>Copy & Paste</b></summary>
 
@@ -59,6 +60,7 @@ if err := copiedSymLink.Paste("/home/john/documents"); err != nil {
 ```
 </details>
 
+<!-- RENAME, MOVE, DELETE -->
 <details open>
 <summary><b>Rename, Move & Delete</b></summary>
 
@@ -100,10 +102,26 @@ fmt.Println("Found it here: " + path)
 ```
 </details>
 
+<!-- DUPLICATE -->
+<details open>
+<summary><b>Duplicate</b></summary>
+
+```go
+// The last part of the destination path will be the new name of the pasted item.
+err := fileman.Duplicate("/home/john/media", "/home/john/backups/media", false)
+
+if err != nil {
+  return err
+}
+```
+</details>
+
+<!-- GET TYPE -->
 <details open>
 <summary><b>Get Type</b></summary>
 
 ```go
+// Boolean value determines if "symLink" should be included as a result.
 itemType, err := fileman.GetType("/home/john/media", false)
 
 if err != nil {

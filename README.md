@@ -28,26 +28,35 @@ go get -u github.com/Hermitter/fileman
 <summary><b>Copy & Paste</b></summary>
 
 ```go
-// Copy directory
-newDir, err := fileman.CopyDir("/home/john/documents")
+  // Copy: returns a struct that allows you to edit/view the name & contents of an item
+  copiedDir, err := fileman.CopyDir("/home/john/Desktop/someDirectory")
   if err != nil {
-  fmt.Println(err)
-    return
+    return err
   }
 
-// Rename copy
-newDir.Name = "cloned_documents"
-// Contents of copied dir can be read & edited
-//Dirs     []Dir
-//Files    []File
-//SymLinks []SymLink
+  copiedFile, err := fileman.CopyFile("/home/john/Desktop/someFile.txt")
+  if err != nil {
+    return err
+  }
 
-// Paste directory
-err = newDir.Paste("/home/john", false)
-if err != nil {
-  fmt.Println(err)
-  return
-}
+  copiedSymLink, err := fileman.CopySymLink("/home/john/Desktop/someSymLink.txt")
+  if err != nil {
+    return err
+  }
+
+  // Paste: will not overwrite existing items
+  // the names of the pasted items are copiedDir.Name, copiedFile.Name, copiedSymLink.Name
+  if err := copiedDir.Paste("/home/john/documents", false); err != nil {
+    return err
+  }
+
+  if err := copiedFile.Paste("/home/john/documents", false); err != nil {
+    return err
+  }
+
+  if err := copiedSymLink.Paste("/home/john/documents"); err != nil {
+    return err
+  }
 ```
 </details>
 

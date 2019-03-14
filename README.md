@@ -28,35 +28,35 @@ go get -u github.com/Hermitter/fileman
 <summary><b>Copy & Paste</b></summary>
 
 ```go
-  // Copy: returns a struct that allows you to edit/view the name & contents of an item
-  copiedDir, err := fileman.CopyDir("/home/john/Desktop/someDirectory")
-  if err != nil {
-    return err
-  }
+// Copy: returns a struct that allows you to edit/view the name & contents of an item
+copiedDir, err := fileman.CopyDir("/home/john/Desktop/someDirectory")
+if err != nil {
+  return err
+}
 
-  copiedFile, err := fileman.CopyFile("/home/john/Desktop/someFile.txt")
-  if err != nil {
-    return err
-  }
+copiedFile, err := fileman.CopyFile("/home/john/Desktop/someFile.txt")
+if err != nil {
+  return err
+}
 
-  copiedSymLink, err := fileman.CopySymLink("/home/john/Desktop/someSymLink.txt")
-  if err != nil {
-    return err
-  }
+copiedSymLink, err := fileman.CopySymLink("/home/john/Desktop/someSymLink.txt")
+if err != nil {
+  return err
+}
 
-  // Paste: will not overwrite existing items
-  // the names of the pasted items are copiedDir.Name, copiedFile.Name, copiedSymLink.Name
-  if err := copiedDir.Paste("/home/john/documents", false); err != nil {
-    return err
-  }
+// Paste: will not overwrite existing items
+// the names of the pasted items are copiedDir.Name, copiedFile.Name, copiedSymLink.Name
+if err := copiedDir.Paste("/home/john/documents", false); err != nil {
+  return err
+}
 
-  if err := copiedFile.Paste("/home/john/documents", false); err != nil {
-    return err
-  }
+if err := copiedFile.Paste("/home/john/documents", false); err != nil {
+  return err
+}
 
-  if err := copiedSymLink.Paste("/home/john/documents"); err != nil {
-    return err
-  }
+if err := copiedSymLink.Paste("/home/john/documents"); err != nil {
+  return err
+}
 ```
 </details>
 
@@ -64,26 +64,26 @@ go get -u github.com/Hermitter/fileman
 <summary><b>Rename, Move & Delete</b></summary>
 
 ```go
-  // Rename
-  err := fileman.Rename("./old.txt", "new.txt")
-  if err != nil {
-    fmt.Println(err)
-    return
-  }
-
-  // Move
-  err = fileman.Move("./new.txt", "/home/john/documents")
-  if err != nil {
+// Rename
+err := fileman.Rename("./old.txt", "new.txt")
+if err != nil {
   fmt.Println(err)
-    return
-  }
+  return
+}
 
-  // Delete
-  err = fileman.Delete("/home/john/documents/new.txt")
-  if err != nil {
-    fmt.Println(err)
-    return
-  }
+// Move
+err = fileman.Move("./new.txt", "/home/john/documents")
+if err != nil {
+fmt.Println(err)
+  return
+}
+
+// Delete
+err = fileman.Delete("/home/john/documents/new.txt")
+if err != nil {
+  fmt.Println(err)
+  return
+}
 ```
 </details>
 

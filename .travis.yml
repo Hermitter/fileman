@@ -32,6 +32,10 @@ notifications:
 matrix:
   allow_failures:
     - os: windows
+    
+# Codecov setup
+before_install:
+  - go mod init codecov
 
 # script always runs to completion (set +e). If we have linter issues AND a
 # failing test, we want to see both. Configure golangci-lint with a

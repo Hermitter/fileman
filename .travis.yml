@@ -33,10 +33,9 @@ matrix:
   allow_failures:
     - os: windows
     
-# Install golang
+# Codecov setup
 before_install:
   - go mod init codecov
-  - go get -u github.com/Hermitter/fileman
 
 # script always runs to completion (set +e). If we have linter issues AND a
 # failing test, we want to see both. Configure golangci-lint with a
